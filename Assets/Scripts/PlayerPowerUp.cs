@@ -15,7 +15,10 @@ public class PlayerPowerUp : MonoBehaviour
     PlayerController player;
 
     bool hasPowerUp = false;
+
     PowerUp power = null;
+    PowerUpType powerType;
+    float powerStrength = 0f;
 
     private void Awake()
     {
@@ -39,7 +42,10 @@ public class PlayerPowerUp : MonoBehaviour
 
         if (power != null)
         {
+            powerStrength = power.GetPowerUpStrength();
+            powerType = power.GetPowerType();
             hasPowerUp = true;
+
             powerUpIndicator.SetActive(true);
             StartCoroutine(PowerupCountdownRoutine(power.GetPowerActiveTime()));
             other.gameObject.SetActive(false);
@@ -53,10 +59,10 @@ public class PlayerPowerUp : MonoBehaviour
             Rigidbody enemyRb = collision.gameObject.GetComponent<Rigidbody>();
             Vector3 awayFromPlayer = enemyRb.gameObject.transform.position - transform.position;
 
-            if (power.GetPowerType() == PowerUpType.Power_strengthUP)
+            if (powerType == PowerUpType.Power_strengthUP)
             {
                 // Push enemy away from player
-                enemyRb.AddForce(awayFromPlayer * power.GetPowerUpStrength(), ForceMode.Impulse);
+                enemyRb.AddForce(awayFromPlayer * powerStrength, ForceMode.Impulse);
             }
         }
     }
@@ -71,9 +77,7 @@ public class PlayerPowerUp : MonoBehaviour
     private void DisablePowerUp()
     {
         powerUpIndicator.SetActive(false);
-
         hasPowerUp = false;
         Destroy(power.gameObject);
-        power = null;
     }
 }
