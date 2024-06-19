@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 4746699175001688161}
   - component: {fileID: 4746699175001688162}
   - component: {fileID: 4746699175001688165}
+  - component: {fileID: 4011086793555132333}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -129,3 +130,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   basicSpeed: 5
   focalPoint: {fileID: 0}
+--- !u!114 &4011086793555132333
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4746699175001688163}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 93b5d112ed220094183dca400cc63ba6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  powerUpIndicator: {fileID: 0}
+  indicatorColor: {r: 0.7830189, g: 0, b: 0, a: 1}

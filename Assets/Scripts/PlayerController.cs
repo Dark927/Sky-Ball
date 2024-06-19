@@ -9,7 +9,6 @@ public class PlayerController: MonoBehaviour
     [SerializeField] Transform focalPoint;
     Rigidbody playerRb;
 
-    bool hasPowerUp = false;
 
     float forwardInput = 0;
 
@@ -26,24 +25,6 @@ public class PlayerController: MonoBehaviour
     private void FixedUpdate()
     {
         playerRb.AddForce(focalPoint.forward * basicSpeed * forwardInput);
-    }
-
-
-    private void OnTriggerEnter(Collider other)
-    {
-        if (other.CompareTag("Powerup"))
-        {
-            Destroy(other.gameObject);
-            hasPowerUp = true;
-        }
-    }
-
-    private void OnCollisionEnter(Collision collision)
-    {
-        if(collision.gameObject.CompareTag("Enemy") && hasPowerUp)
-        {
-            Debug.Log("test");
-        }
     }
 }
 
