@@ -19,6 +19,7 @@ public class PlayerPowerUp : MonoBehaviour
     PowerUp power = null;
     PowerUpType powerType;
     float powerStrength = 0f;
+    float powerActiveTime = 0f;
 
     private void Awake()
     {
@@ -42,13 +43,25 @@ public class PlayerPowerUp : MonoBehaviour
 
         if (power != null)
         {
+            // Remove current power up if it exists
+
+            StopAllCoroutines();
+
+            // Save new power up parameters 
+
             powerStrength = power.GetPowerUpStrength();
             powerType = power.GetPowerType();
-            hasPowerUp = true;
+            powerActiveTime = power.GetPowerActiveTime();
 
+            // Destroy power up object from scene 
+
+            Destroy(power.gameObject);
+            power = null;
+
+
+            hasPowerUp = true;
             powerUpIndicator.SetActive(true);
-            StartCoroutine(PowerupCountdownRoutine(power.GetPowerActiveTime()));
-            other.gameObject.SetActive(false);
+            StartCoroutine(PowerupCountdownRoutine(powerActiveTime));
         }
     }
 
@@ -78,6 +91,5 @@ public class PlayerPowerUp : MonoBehaviour
     {
         powerUpIndicator.SetActive(false);
         hasPowerUp = false;
-        Destroy(power.gameObject);
     }
 }

@@ -7,7 +7,7 @@ public class Enemy : MonoBehaviour
     [Header("Main Settings")]
 
     [SerializeField] float basicSpeed = 3f;
-    Rigidbody rigidbody = null;
+    Rigidbody rb;
 
     Vector3 direction = Vector3.zero;
 
@@ -15,27 +15,16 @@ public class Enemy : MonoBehaviour
     [Header("Destroy bounds Settings")]
 
     [SerializeField] float defaultBound = -10f;
-    [SerializeField] float errorBound = -30f;
 
     private void Awake()
     {
-        rigidbody = GetComponent<Rigidbody>();
+        rb = GetComponent<Rigidbody>();
     }
 
     private void Update()
     {
         if(transform.position.y < defaultBound)
         {
-            // Check if object reach error bound ( on spawn )
-
-            if(transform.position.y < errorBound)
-            {
-                // Just destroy gameObject without giving any score etc.
-
-                Destroy(gameObject);
-                return;
-            }
-
             // TODO : Add score for player 
             Destroy(gameObject);
         }
@@ -46,6 +35,6 @@ public class Enemy : MonoBehaviour
 
     private void FixedUpdate()
     {
-        rigidbody.AddForce(direction * basicSpeed);
+        rb.AddForce(direction * basicSpeed);
     }
 }
