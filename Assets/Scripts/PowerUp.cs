@@ -14,10 +14,24 @@ public enum PowerUpType
 
 public class PowerUp : MonoBehaviour
 {
+    // -----------------------------------------------------------------------
+    // Parameters
+    // -----------------------------------------------------------------------
+
+    #region Parameters
+
     [SerializeField] PowerUpType powerType = PowerUpType.Power_firstIndex;
     [SerializeField] float powerUpActiveTime = 5f;
     [SerializeField] float powerUpStrength = 5f;
 
+    #endregion
+
+
+    // -----------------------------------------------------------------------
+    // Public Methods
+    // -----------------------------------------------------------------------
+
+    #region Public Methods
 
     public PowerUpType GetPowerType()
     {
@@ -41,4 +55,6 @@ public class PowerUp : MonoBehaviour
     {
         return powerUpStrength;
     }
+
+    #endregion
 }

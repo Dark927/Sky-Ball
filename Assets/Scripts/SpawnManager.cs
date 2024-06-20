@@ -4,15 +4,22 @@ using UnityEngine;
 
 public class SpawnManager : MonoBehaviour
 {
-    [Header("Enemy Settings")]
+    // -----------------------------------------------------------------------
+    // Parameters
+    // -----------------------------------------------------------------------
 
-    [SerializeField] GameObject enemyPrefab;
+    #region Parameters 
+
+    [Header("Enemy Settings")]
+    [Space]
+
+    [SerializeField] List<GameObject> enemyPrefabs;
     [SerializeField] int maxEnemiesCount = 500;
-    [SerializeField] int enemiesToSpawn = 1;
     int activeEnemies = 0;
 
     [Space]
     [Header("Power Ups Settings")]
+    [Space]
 
     [SerializeField] List<GameObject> powerUpPrefabs;
     [SerializeField] int maxPowerUpsCount = 5;
@@ -21,31 +28,58 @@ public class SpawnManager : MonoBehaviour
 
     [Space]
     [Header("Random position Settings")]
+    [Space]
 
     [SerializeField] float safeDistance = 3f;
     [SerializeField] float spawnRadius = 8f;
-    float errorBoundY = -50f;
+
 
     List<SpawnPoint> actualSpawners = new();
-    int waveCount = 0;
-    int increaseDifficultyInterval = 3;
+    DifficultyManager difficultyManager;
 
+    // Error identifiers 
+
+    float errorBoundY = -50f;
+    bool fatalError = false;
+
+    #endregion
+
+
+    // -----------------------------------------------------------------------
+    // Private Methods
+    // -----------------------------------------------------------------------
+
+    #region Private Methods
+
+    private void Awake()
+    {
+        difficultyManager = FindObjectOfType<DifficultyManager>();
+
+        if(difficultyManager == null)
+        {
+            fatalError = true;
+            Debug.Log("# Fatal Error : SpawnManager.cs -> difficultyManager == null, can't spawn enemies.");
+        }
+    }
 
     // Update is called once per frame
-    void Update()
+    private void Update()
+    {
+        if (!fatalError)
+        {
+            NextWave();
+        }
+    }
+
+    private void NextWave()
     {
         activeEnemies = FindObjectsOfType<Enemy>().Length;
 
         if (activeEnemies == 0)
         {
-            waveCount++;
+            difficultyManager.NextWave();
 
-            if ((waveCount % increaseDifficultyInterval) == 0)
-            {
-                enemiesToSpawn++;
-            }
-
-            SpawnNewWave(enemiesToSpawn);
+            SpawnNewWave(difficultyManager.EnemySpawnCount);
         }
     }
 
@@ -90,10 +124,14 @@ public class SpawnManager : MonoBehaviour
             enemiesCount = maxEnemiesCount;
         }
 
+        List<GameObject> availableEnemies = difficultyManager.AvailableEnemyList(enemyPrefabs);
+
         // Spawn enemies in cycle 
         for (int i = 0; i < enemiesCount; ++i)
         {
-            SpawnEnemy(enemyPrefab);
+            int enemyIndex = Random.Range(0, availableEnemies.Count);
+
+            SpawnEnemy(availableEnemies[enemyIndex]);
         }
 
         actualSpawners.Clear();
@@ -227,4 +265,6 @@ public class SpawnManager : MonoBehaviour
         actualSpawners.Add(actualSpawner);
         return actualSpawner;
     }
+
+    #endregion
 }

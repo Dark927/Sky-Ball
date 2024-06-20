@@ -133,6 +133,50 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 2926572027730183764, guid: dece5f62b48b1d645b882851f63fa596, type: 3}
   m_PrefabInstance: {fileID: 1184821726}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &213872362
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 213872363}
+  - component: {fileID: 213872364}
+  m_Layer: 0
+  m_Name: DifficultyManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &213872363
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 213872362}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 317437587}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &213872364
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 213872362}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c1d06dc404b43854bbd77e8b09e5d227, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &245963551
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -251,6 +295,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1323904185}
+  - {fileID: 213872363}
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -892,9 +937,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4ca87772189deb9409aa54ead71e38fe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enemyPrefab: {fileID: 3543361814762661665, guid: 347b7cd0a924c9141a29259d10b47f9c, type: 3}
+  enemyPrefabs:
+  - {fileID: 3543361814762661665, guid: 347b7cd0a924c9141a29259d10b47f9c, type: 3}
+  - {fileID: 6440045025822933787, guid: 5dafbe9bb47b7f34f83b0075f5b87cd5, type: 3}
+  - {fileID: 5596791434233900217, guid: 76a5779cd3a14e647a883a3e3d74bccd, type: 3}
+  - {fileID: 543620560072446153, guid: d7a922644973b3a49a75026a10457a7d, type: 3}
+  - {fileID: 2537065458443266940, guid: 758fe34f890de5a44a96477dae388836, type: 3}
   maxEnemiesCount: 25
-  enemiesToSpawn: 1
   powerUpPrefabs:
   - {fileID: 4713745801998071680, guid: f116f29acaf136f4b90cbaa82333e887, type: 3}
   maxPowerUpsCount: 5

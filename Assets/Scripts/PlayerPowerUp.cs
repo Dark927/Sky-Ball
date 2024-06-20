@@ -2,11 +2,16 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-
-
 public class PlayerPowerUp : MonoBehaviour
 {
+    // -----------------------------------------------------------------------
+    // Parameters
+    // -----------------------------------------------------------------------
+
+    #region Parameters
+
     [Header("Indicator Settings")]
+
     [SerializeField] GameObject powerUpIndicator;
     [SerializeField] Color indicatorColor;
     Material indicatorMaterial;
@@ -20,6 +25,14 @@ public class PlayerPowerUp : MonoBehaviour
     PowerUpType powerType;
     float powerStrength = 0f;
     float powerActiveTime = 0f;
+
+    #endregion
+
+    // -----------------------------------------------------------------------
+    // Private Methods
+    // -----------------------------------------------------------------------
+
+    #region Private Methods
 
     private void Awake()
     {
@@ -92,4 +105,6 @@ public class PlayerPowerUp : MonoBehaviour
         powerUpIndicator.SetActive(false);
         hasPowerUp = false;
     }
+
+    #endregion
 }

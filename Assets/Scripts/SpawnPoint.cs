@@ -4,17 +4,22 @@ using UnityEngine;
 
 public class SpawnPoint : MonoBehaviour
 {
+    // -----------------------------------------------------------------------
+    // Parameters
+    // -----------------------------------------------------------------------
+
+    #region Parameters
+
     bool isBlocked = false;
 
-    public void Spawn(GameObject enemyToSpawn)
-    {
-        Instantiate(enemyToSpawn, transform.position, Quaternion.identity);
-    }
+    #endregion
 
-    public bool IsBlocked()
-    {
-        return isBlocked;
-    }
+
+    // -----------------------------------------------------------------------
+    // Private Methods
+    // -----------------------------------------------------------------------
+
+    #region Private Methods
 
     private void OnTriggerEnter(Collider other)
     {
@@ -36,4 +41,26 @@ public class SpawnPoint : MonoBehaviour
     {
         return (collision.gameObject.GetComponent<Enemy>() != null);
     }
+
+    #endregion
+
+
+    // -----------------------------------------------------------------------
+    // Public Methods
+    // -----------------------------------------------------------------------
+
+    #region Public Methods
+
+    public void Spawn(GameObject enemyToSpawn)
+    {
+        Instantiate(enemyToSpawn, transform.position, Quaternion.identity);
+    }
+
+    public bool IsBlocked()
+    {
+        return isBlocked;
+    }
+
+    #endregion 
+
 }
