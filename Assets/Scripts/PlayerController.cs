@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody))]
-public class PlayerController: MonoBehaviour
+public class PlayerController : MonoBehaviour
 {
     // -----------------------------------------------------------------------
     // Parameters
@@ -16,12 +16,13 @@ public class PlayerController: MonoBehaviour
     Rigidbody playerRb;
 
     float forwardInput = 0;
+    bool onGround = true;
 
     #endregion
 
 
     // -----------------------------------------------------------------------
-    // Parameters
+    // Private Methods
     // -----------------------------------------------------------------------
 
     #region Private Methods
@@ -39,6 +40,36 @@ public class PlayerController: MonoBehaviour
     private void FixedUpdate()
     {
         playerRb.AddForce(focalPoint.forward * basicSpeed * forwardInput);
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("Ground"))
+        {
+            onGround = true;
+        }
+    }
+
+    private void OnCollisionExit(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("Ground"))
+        {
+            onGround = false;
+        }
+    }
+
+    #endregion
+
+
+    // -----------------------------------------------------------------------
+    // Private Methods
+    // -----------------------------------------------------------------------
+
+    #region Public Methods
+
+    public bool OnGround()
+    {
+        return onGround;
     }
 
     #endregion

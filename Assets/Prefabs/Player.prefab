@@ -142,5 +142,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 93b5d112ed220094183dca400cc63ba6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  rocketPrefab: {fileID: 6040045791043470375, guid: 08ac19300a93a014ea86763d3bd7d84c, type: 3}
+  explosionPrefab: {fileID: 5236669175025132845, guid: 6c935dfb229155d43a850dfa39be4e5f, type: 3}
   powerUpIndicator: {fileID: 0}
-  indicatorColor: {r: 0.7830189, g: 0, b: 0, a: 1}

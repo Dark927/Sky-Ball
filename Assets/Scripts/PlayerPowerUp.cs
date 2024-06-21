@@ -10,10 +10,13 @@ public class PlayerPowerUp : MonoBehaviour
 
     #region Parameters
 
-    // Power settings 
+    // Powers settings 
 
-    [Header("Power Settings")]
+    [Header("Rockets power Settings")]
     [SerializeField] GameObject rocketPrefab;
+
+    [Header("Explosion power Settings")]
+    [SerializeField] GameObject explosionPrefab;
 
     bool hasPowerUp = false;
     
@@ -30,6 +33,7 @@ public class PlayerPowerUp : MonoBehaviour
     [SerializeField] GameObject powerUpIndicator;
     Material indicatorMaterial;
     Vector3 indicatorOffset = new Vector3(0, -0.55f, 0);
+    Vector3 indicatorRotation = new Vector3(0, 90f, 0);
 
     PlayerController player;
 
@@ -50,7 +54,13 @@ public class PlayerPowerUp : MonoBehaviour
 
     private void Update()
     {
+        ConfigureIndicator();
+    }
+
+    private void ConfigureIndicator()
+    {
         powerUpIndicator.transform.position = player.transform.position + indicatorOffset;
+        powerUpIndicator.transform.Rotate(indicatorRotation * Time.deltaTime);
     }
 
     private void OnTriggerEnter(Collider other)
@@ -76,13 +86,28 @@ public class PlayerPowerUp : MonoBehaviour
 
             // Activate different power types 
 
-            if (powerType == PowerUpType.Power_rockets)
-            {
-                StartCoroutine(LaunchRocketsRoutine());
-            }
+            ActivatePowerUp();
+
         }
     }
 
+    private void ActivatePowerUp()
+    {
+        switch (powerType)
+        {
+            case PowerUpType.Power_rockets:
+                {
+                    StartCoroutine(LaunchRocketsRoutine());
+                }
+                break;
+
+            case PowerUpType.Power_explosion:
+                {
+                    StartCoroutine(PushExplodeRoutine());
+                }
+                break;
+        }
+    }
 
     private void ConfigurePowerParameters(PowerUp power)
     {
@@ -97,9 +122,11 @@ public class PlayerPowerUp : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.CompareTag("Enemy") && hasPowerUp)
+        Enemy enemy = collision.gameObject.GetComponent<Enemy>();
+
+        if ((enemy != null) && hasPowerUp)
         {
-            Rigidbody enemyRb = collision.gameObject.GetComponent<Rigidbody>();
+            Rigidbody enemyRb = enemy.GetComponent<Rigidbody>();
             Vector3 awayFromPlayer = enemyRb.gameObject.transform.position - transform.position;
 
 
@@ -108,7 +135,9 @@ public class PlayerPowerUp : MonoBehaviour
                 case PowerUpType.Power_strengthUP:
                     {
                         // Push enemy away from player
-                        enemyRb.AddForce(awayFromPlayer * powerStrength, ForceMode.Impulse);
+                        float massModifier = (enemyRb.mass < 1f) ? 1f : enemyRb.mass;
+
+                        enemyRb.AddForce(awayFromPlayer * powerStrength * massModifier, ForceMode.Impulse);
                     }
                     break;
             }
@@ -131,6 +160,22 @@ public class PlayerPowerUp : MonoBehaviour
         }
     }
 
+    IEnumerator PushExplodeRoutine()
+    {
+        Rigidbody playerRb = player.GetComponent<Rigidbody>();
+        playerRb.AddForce(Vector3.up * powerStrength * 50 * Time.deltaTime, ForceMode.Impulse);
+
+        yield return new WaitForSeconds(1);
+
+        do
+        {
+            yield return null;
+        } while (!player.OnGround());
+
+        Vector3 cameraViewOffset = new Vector3(0, 0, -1.5f);
+        GameObject explosionObj = Instantiate(explosionPrefab, transform.position + cameraViewOffset, Quaternion.identity, transform.parent);
+        explosionObj.GetComponent<Explosion>().Explode(powerStrength);
+    }
 
     IEnumerator PowerupCountdownRoutine(float powerupActiveTime)
     {

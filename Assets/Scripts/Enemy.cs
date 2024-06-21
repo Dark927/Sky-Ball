@@ -16,6 +16,7 @@ public enum EnemyType
     Enemy_numberOfEnemy = Enemy_lastIndex + 1,
 }
 
+[RequireComponent(typeof(Rigidbody))]
 public class Enemy : MonoBehaviour
 {
     // -----------------------------------------------------------------------
