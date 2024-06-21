@@ -129,6 +129,12 @@ public class SpawnManager : MonoBehaviour
         // Spawn enemies in cycle 
         for (int i = 0; i < enemiesCount; ++i)
         {
+            if (availableEnemies.Count == 0)
+            {
+                Debug.Log("# Warning :: Skip wave, list of available enemies is empty! - " + gameObject.name);
+                break;
+            }
+
             int enemyIndex = Random.Range(0, availableEnemies.Count);
 
             SpawnEnemy(availableEnemies[enemyIndex]);
@@ -144,7 +150,7 @@ public class SpawnManager : MonoBehaviour
 
         if (powerSpawnPosition.y > errorBoundY)
         {
-            Instantiate(powerUpPrefabs[powerRandomIndex], powerSpawnPosition, Quaternion.identity);
+            Instantiate(powerUpPrefabs[powerRandomIndex], powerSpawnPosition, powerUpPrefabs[powerRandomIndex].transform.rotation);
         }
     }
 

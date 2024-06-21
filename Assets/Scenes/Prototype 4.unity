@@ -571,7 +571,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
-    m_TransformParent: {fileID: 1653693127}
+    m_TransformParent: {fileID: 1920188677}
     m_Modifications:
     - target: {fileID: 2924183030292528184, guid: dece5f62b48b1d645b882851f63fa596, type: 3}
       propertyPath: m_Name
@@ -579,7 +579,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2926572027730183764, guid: dece5f62b48b1d645b882851f63fa596, type: 3}
       propertyPath: m_RootOrder
-      value: 4
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2926572027730183764, guid: dece5f62b48b1d645b882851f63fa596, type: 3}
       propertyPath: m_LocalPosition.x
@@ -939,12 +939,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemyPrefabs:
   - {fileID: 3543361814762661665, guid: 347b7cd0a924c9141a29259d10b47f9c, type: 3}
+  - {fileID: 6440045025822933787, guid: 7f94a9c12ca745a48b90f30195f374f2, type: 3}
   - {fileID: 6440045025822933787, guid: 5dafbe9bb47b7f34f83b0075f5b87cd5, type: 3}
   - {fileID: 5596791434233900217, guid: 76a5779cd3a14e647a883a3e3d74bccd, type: 3}
-  - {fileID: 543620560072446153, guid: d7a922644973b3a49a75026a10457a7d, type: 3}
-  - {fileID: 2537065458443266940, guid: 758fe34f890de5a44a96477dae388836, type: 3}
   maxEnemiesCount: 25
   powerUpPrefabs:
+  - {fileID: 7987662296448544420, guid: 71a97f6031b265141bc7acfa587e6ee9, type: 3}
   - {fileID: 4713745801998071680, guid: f116f29acaf136f4b90cbaa82333e887, type: 3}
   maxPowerUpsCount: 5
   powerUpsToSpawn: 1
@@ -1195,8 +1195,6 @@ Transform:
   - {fileID: 1545490757}
   - {fileID: 2013606461}
   - {fileID: 1403545345}
-  - {fileID: 903827360}
-  - {fileID: 187237125}
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1258,6 +1256,39 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 2, y: 2, z: 2}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!1 &1920188676
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1920188677}
+  m_Layer: 0
+  m_Name: Player
+  m_TagString: Player
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1920188677
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1920188676}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 903827360}
+  - {fileID: 187237125}
+  m_Father: {fileID: 0}
+  m_RootOrder: 4
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &2013606461 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5831814716121893815, guid: 363a8f737719f4d2eafb35f885f3706f, type: 3}
@@ -1300,15 +1331,19 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
-    m_TransformParent: {fileID: 1653693127}
+    m_TransformParent: {fileID: 1920188677}
     m_Modifications:
+    - target: {fileID: 4011086793555132333, guid: 118ef74ccc33a82408cc1b1e1e940b1b, type: 3}
+      propertyPath: rocketPrefab
+      value: 
+      objectReference: {fileID: 6040045791043470375, guid: 08ac19300a93a014ea86763d3bd7d84c, type: 3}
     - target: {fileID: 4011086793555132333, guid: 118ef74ccc33a82408cc1b1e1e940b1b, type: 3}
       propertyPath: powerUpIndicator
       value: 
       objectReference: {fileID: 187237122}
     - target: {fileID: 4746699175001688163, guid: 118ef74ccc33a82408cc1b1e1e940b1b, type: 3}
       propertyPath: m_Name
-      value: Player
+      value: Player_sphere
       objectReference: {fileID: 0}
     - target: {fileID: 4746699175001688165, guid: 118ef74ccc33a82408cc1b1e1e940b1b, type: 3}
       propertyPath: focalPoint
@@ -1316,7 +1351,7 @@ PrefabInstance:
       objectReference: {fileID: 871318248}
     - target: {fileID: 4746699175001688166, guid: 118ef74ccc33a82408cc1b1e1e940b1b, type: 3}
       propertyPath: m_RootOrder
-      value: 3
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4746699175001688166, guid: 118ef74ccc33a82408cc1b1e1e940b1b, type: 3}
       propertyPath: m_LocalPosition.x

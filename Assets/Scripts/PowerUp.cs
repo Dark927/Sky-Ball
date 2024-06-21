@@ -5,7 +5,8 @@ using UnityEngine;
 public enum PowerUpType
 {
     Power_strengthUP = 0,
-    Power_massUP = 1,
+    Power_rockets = 1,
+    Power_massUP,
 
     Power_firstIndex = 0,
     Power_lastIndex = Power_massUP,
@@ -23,6 +24,9 @@ public class PowerUp : MonoBehaviour
     [SerializeField] PowerUpType powerType = PowerUpType.Power_firstIndex;
     [SerializeField] float powerUpActiveTime = 5f;
     [SerializeField] float powerUpStrength = 5f;
+    [SerializeField] float powerUpReloadTime = 1f;
+    [SerializeField] Color indicatorColor;
+
 
     #endregion
 
@@ -51,10 +55,20 @@ public class PowerUp : MonoBehaviour
         return powerUpActiveTime;
     }
 
+    public float GetPowerReloadTime()
+    {
+        return powerUpReloadTime;
+    }
+
     public float GetPowerUpStrength()
     {
         return powerUpStrength;
     }
+
+    public Color GetIndicatorColor()
+    {
+        return indicatorColor;
+    }    
 
     #endregion
 }

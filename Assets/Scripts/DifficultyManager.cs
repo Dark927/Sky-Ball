@@ -4,9 +4,10 @@ using UnityEngine;
 
 public enum WaveType
 {
-    Wave_easy = 0,
-    Wave_medium = 1,
-    Wave_hard = 2,
+    Wave_start = 0,
+    Wave_easy = 1,
+    Wave_medium = 2,
+    Wave_hard = 3,
 
     Wave_boss,
 
@@ -28,7 +29,8 @@ public class DifficultyManager : MonoBehaviour
     int waveCount = 0;
     int increaseDifficultyInterval = 3;
 
-    List<int> waveBounds = new List<int> { 3, 6, 9 };
+    List<WaveType> waveTypes = new List<WaveType> { WaveType.Wave_start, WaveType.Wave_easy, WaveType.Wave_medium, WaveType.Wave_hard, WaveType.Wave_boss };
+    List<int> waveBounds = new List<int> { 2, 3, 6, 9, 11 };
 
     #endregion
 
@@ -40,26 +42,12 @@ public class DifficultyManager : MonoBehaviour
 
     private WaveType GetWaveType()
     {
-        int waveBoundsIndex = 0;
-
-        if (waveCount < waveBounds[waveBoundsIndex++])
+        for (int i = 0; i < waveBounds.Count; ++i)
         {
-            return WaveType.Wave_easy;
-        }
-
-        if (waveCount < waveBounds[waveBoundsIndex++])
-        {
-            return WaveType.Wave_medium;
-        }
-
-        if (waveCount < waveBounds[waveBoundsIndex++])
-        {
-            return WaveType.Wave_hard;
-        }
-
-        if (waveCount == waveBounds[waveBoundsIndex++])
-        {
-            return WaveType.Wave_boss;
+            if(waveCount < waveBounds[i])
+            {
+                return waveTypes[i];
+            }
         }
 
         return WaveType.Wave_hard;
@@ -153,6 +141,12 @@ public class DifficultyManager : MonoBehaviour
         switch (type)
         {
             default:
+            case WaveType.Wave_start:
+                {
+                    List<EnemyType> enemyTypesToSpawn = new List<EnemyType> { EnemyType.Enemy_default };
+                    return GenerateAvailableEnemyList(allEnemyPrefabs, enemyTypesToSpawn);
+                }
+
             case WaveType.Wave_easy:
                 {
                     List<EnemyType> enemyTypesToSpawn = new List<EnemyType> { EnemyType.Enemy_default, EnemyType.Enemy_fast };
