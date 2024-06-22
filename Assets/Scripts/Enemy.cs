@@ -5,9 +5,10 @@ using UnityEngine;
 public enum EnemyType
 {
     Enemy_default = 0,
-    Enemy_powerful = 1,
-    Enemy_fast = 2,
-    Enemy_boss = 3,
+    Enemy_powerful,
+    Enemy_fast,
+    Enemy_boss,
+    Enemy_range,
 
     Enemy_group,
 
@@ -33,8 +34,9 @@ public class Enemy : MonoBehaviour
     float pushForceMultiplier = 0.1f;
 
     Rigidbody rb;
-
     Vector3 direction = Vector3.zero;
+
+    RocketLauncher rocketLauncher;
 
     [Space]
     [Header("Destroy bounds Settings")]
@@ -53,6 +55,15 @@ public class Enemy : MonoBehaviour
     private void Awake()
     {
         rb = GetComponent<Rigidbody>();
+        rocketLauncher = GetComponentInChildren<RocketLauncher>();
+    }
+
+    private void Start()
+    {
+        if(rocketLauncher != null)
+        {
+            rocketLauncher.StartRocketAttack<PlayerController>();
+        }
     }
 
     private void Update()

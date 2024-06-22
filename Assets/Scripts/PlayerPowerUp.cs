@@ -19,7 +19,7 @@ public class PlayerPowerUp : MonoBehaviour
     [SerializeField] GameObject explosionPrefab;
 
     bool hasPowerUp = false;
-    
+
     PowerUp power = null;
     PowerUpType powerType;
     float powerStrength = 0f;
@@ -36,7 +36,7 @@ public class PlayerPowerUp : MonoBehaviour
     Vector3 indicatorRotation = new Vector3(0, 90f, 0);
 
     PlayerController player;
-
+    RocketLauncher rocketLauncher;
 
     #endregion
 
@@ -50,6 +50,13 @@ public class PlayerPowerUp : MonoBehaviour
     {
         player = GetComponent<PlayerController>();
         indicatorMaterial = powerUpIndicator.GetComponent<MeshRenderer>().material;
+        rocketLauncher = GetComponentInChildren<RocketLauncher>();
+
+        if (rocketLauncher == null)
+        {
+
+            Debug.Log("# Warning : Rockets can not be launched. RocketLauncher == null. - " + gameObject.name);
+        }
     }
 
     private void Update()
@@ -97,7 +104,7 @@ public class PlayerPowerUp : MonoBehaviour
         {
             case PowerUpType.Power_rockets:
                 {
-                    StartCoroutine(LaunchRocketsRoutine());
+                    ActivateRocketLauncher();
                 }
                 break;
 
@@ -106,6 +113,14 @@ public class PlayerPowerUp : MonoBehaviour
                     StartCoroutine(PushExplodeRoutine());
                 }
                 break;
+        }
+    }
+
+    private void ActivateRocketLauncher()
+    {
+        if (rocketLauncher != null)
+        {
+            rocketLauncher.StartRocketAttack<Enemy>();
         }
     }
 
@@ -144,22 +159,6 @@ public class PlayerPowerUp : MonoBehaviour
         }
     }
 
-
-    IEnumerator LaunchRocketsRoutine()
-    {
-        while (true)
-        {
-            Enemy[] activeEnemyList = FindObjectsOfType<Enemy>();
-
-            foreach (Enemy enemy in activeEnemyList)
-            {
-                LaunchRocket(transform, enemy.transform);
-            }
-
-            yield return new WaitForSeconds(powerReloadTime);
-        }
-    }
-
     IEnumerator PushExplodeRoutine()
     {
         Rigidbody playerRb = player.GetComponent<Rigidbody>();
@@ -189,6 +188,8 @@ public class PlayerPowerUp : MonoBehaviour
         powerUpIndicator.SetActive(false);
         hasPowerUp = false;
         StopAllCoroutines();
+
+        rocketLauncher.StopRocketAttack();
     }
 
     #endregion
@@ -200,14 +201,7 @@ public class PlayerPowerUp : MonoBehaviour
 
     #region Public Methods 
 
-    public void LaunchRocket(Transform source, Transform target)
-    {
-        Vector3 lookDirection = (target.position - source.position).normalized;
-        Quaternion lookRotation = Quaternion.LookRotation(lookDirection);
 
-        GameObject rocket = Instantiate(rocketPrefab, source.position + Vector3.up, lookRotation);
-        rocket.GetComponent<RocketLogic>().SetTarget(target);
-    }
 
     #endregion
 }
