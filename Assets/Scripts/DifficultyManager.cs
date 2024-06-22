@@ -149,7 +149,7 @@ public class DifficultyManager : MonoBehaviour
 
             case WaveType.Wave_easy:
                 {
-                    List<EnemyType> enemyTypesToSpawn = new List<EnemyType> { EnemyType.Enemy_default, EnemyType.Enemy_fast };
+                    List<EnemyType> enemyTypesToSpawn = new List<EnemyType> { EnemyType.Enemy_default, EnemyType.Enemy_fast, EnemyType.Enemy_range };
                     return GenerateAvailableEnemyList(allEnemyPrefabs, enemyTypesToSpawn);
                 }
             case WaveType.Wave_medium:
@@ -159,12 +159,12 @@ public class DifficultyManager : MonoBehaviour
                 }
             case WaveType.Wave_hard:
                 {
-                    List<EnemyType> enemyTypesToSpawn = new List<EnemyType> { EnemyType.Enemy_fast, EnemyType.Enemy_powerful, EnemyType.Enemy_group };
+                    List<EnemyType> enemyTypesToSpawn = new List<EnemyType> { EnemyType.Enemy_fast, EnemyType.Enemy_powerful, EnemyType.Enemy_group, EnemyType.Enemy_range };
                     return GenerateAvailableEnemyList(allEnemyPrefabs, enemyTypesToSpawn);
                 }
             case WaveType.Wave_boss:
                 {
-                    List<EnemyType> enemyTypesToSpawn = new List<EnemyType> { EnemyType.Enemy_default, EnemyType.Enemy_fast, EnemyType.Enemy_boss };
+                    List<EnemyType> enemyTypesToSpawn = new List<EnemyType> { EnemyType.Enemy_boss };
                     return GenerateAvailableEnemyList(allEnemyPrefabs, enemyTypesToSpawn);
                 }
         }

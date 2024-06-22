@@ -53,7 +53,8 @@ public class SpawnPoint : MonoBehaviour
 
     public void Spawn(GameObject enemyToSpawn)
     {
-        Instantiate(enemyToSpawn, transform.position, Quaternion.identity);
+        Vector3 offsetY = new Vector3(0, enemyToSpawn.transform.position.y, 0);
+        Instantiate(enemyToSpawn, transform.position + offsetY, Quaternion.identity);
     }
 
     public bool IsBlocked()

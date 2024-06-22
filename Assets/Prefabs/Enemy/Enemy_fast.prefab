@@ -129,5 +129,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   type: 2
   basicSpeed: 10
-  pushForce: 0.5
+  pushForce: 0.4
   defaultBound: -10

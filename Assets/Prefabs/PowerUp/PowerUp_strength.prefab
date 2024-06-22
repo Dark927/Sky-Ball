@@ -111,7 +111,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   powerType: 0
-  powerUpActiveTime: 5
-  powerUpStrength: 5
-  powerUpReloadTime: 1
+  powerUpActiveTime: 8
+  powerUpStrength: 10
+  powerUpReloadTime: 0
   indicatorColor: {r: 0.8490566, g: 0.7003078, b: 0, a: 1}
