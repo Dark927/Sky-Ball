@@ -6,6 +6,7 @@ public enum PowerUpType
 {
     Power_strengthUP = 0,
     Power_rockets = 1,
+    Power_explosion,
     Power_massUP,
 
     Power_firstIndex = 0,
