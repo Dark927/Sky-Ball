@@ -1,16 +1,14 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class RotateCamera : MonoBehaviour
 {
     // -----------------------------------------------------------------------
-    // Parameters
+    // Fields
     // -----------------------------------------------------------------------
 
-    #region Parameters
+    #region Fields
 
-    [SerializeField] float rotationSpeed = 1f;
+    [SerializeField] private float _rotationSpeed = 1f;
 
     #endregion
 
@@ -22,10 +20,11 @@ public class RotateCamera : MonoBehaviour
     #region Private Methods
 
     // Update is called once per frame
+
     private void Update()
     {
         float horizontalInput = Input.GetAxis("Horizontal");
-        transform.Rotate(Vector3.up, rotationSpeed * horizontalInput * Time.deltaTime);
+        transform.Rotate(Vector3.up, _rotationSpeed * horizontalInput * Time.deltaTime);
     }
 
     #endregion

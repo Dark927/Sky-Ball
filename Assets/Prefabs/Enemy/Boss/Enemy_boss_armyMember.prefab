@@ -160,10 +160,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 61b59554d1543894db35ce0fe0bc1266, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  type: 4
-  basicSpeed: 0.5
-  pushForce: 0
-  defaultBound: -10
+  _type: 4
+  _basicSpeed: 0.5
+  _pushForce: 1
+  _deathBoundY: -10
 --- !u!1001 &8746751772882156908
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -217,6 +217,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8746751773585267173, guid: 30fe1c2a39d7e004faef7cff11378296, type: 3}
       propertyPath: rocketPrefab
+      value: 
+      objectReference: {fileID: 6040045791043470375, guid: e11f95d6d1eb6584bb041f57a81baa1b, type: 3}
+    - target: {fileID: 8746751773585267173, guid: 30fe1c2a39d7e004faef7cff11378296, type: 3}
+      propertyPath: _rocketPrefab
       value: 
       objectReference: {fileID: 6040045791043470375, guid: e11f95d6d1eb6584bb041f57a81baa1b, type: 3}
     - target: {fileID: 8746751773585267179, guid: 30fe1c2a39d7e004faef7cff11378296, type: 3}

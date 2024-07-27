@@ -76,8 +76,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f9674cb6575c41e4581d0aa096a92452, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rocketPrefab: {fileID: 6040045791043470375, guid: 08ac19300a93a014ea86763d3bd7d84c, type: 3}
-  reloadTime: 0.5
+  _rocketPrefab: {fileID: 6040045791043470375, guid: 08ac19300a93a014ea86763d3bd7d84c, type: 3}
+  _reloadTime: 0.5
 --- !u!1 &4746699175001688163
 GameObject:
   m_ObjectHideFlags: 0
@@ -207,8 +207,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ad2e2b69614cf074eb0b1bb8bc1e09b9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  basicSpeed: 5
-  focalPoint: {fileID: 0}
+  _basicSpeed: 5
+  _focalPoint: {fileID: 0}
+  _fallBoundY: -5
 --- !u!114 &4011086793555132333
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -221,6 +222,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 93b5d112ed220094183dca400cc63ba6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rocketPrefab: {fileID: 6040045791043470375, guid: 08ac19300a93a014ea86763d3bd7d84c, type: 3}
-  explosionPrefab: {fileID: 5236669175025132845, guid: 6c935dfb229155d43a850dfa39be4e5f, type: 3}
-  powerUpIndicator: {fileID: 0}
+  _rocketPrefab: {fileID: 6040045791043470375, guid: 08ac19300a93a014ea86763d3bd7d84c, type: 3}
+  _explosionPrefab: {fileID: 5236669175025132845, guid: 6c935dfb229155d43a850dfa39be4e5f, type: 3}
+  _powerUpIndicator: {fileID: 0}

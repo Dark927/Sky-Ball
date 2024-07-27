@@ -111,7 +111,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 23722381b77b58142ad2d431d0c6b2fc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rocketType: 1
-  speed: 12
-  rocketForce: 3
-  autoAiming: 0
+  _rocketOwner: 0
+  _speed: 12
+  _rocketForce: 4
+  _autoAiming: 0

@@ -5,19 +5,19 @@ using UnityEngine;
 public class FadeOutColor : MonoBehaviour
 {
     // -----------------------------------------------------------------------
-    // Parameters
+    // Fields
     // -----------------------------------------------------------------------
 
-    #region Parameters
+    #region Fields
 
     [Range(0f, 1f)]
-    [SerializeField] float alphaAlpha = 0;
-    [SerializeField] float duradion = 2f;
+    [SerializeField] private float _alpha = 0;
+    [SerializeField] private float _duration = 2f;
 
-    Material material;
-    Color originalColor;
+    private Material _material;
+    private Color _originalColor;
 
-    const float invalidAlpha = -1f;
+    private const float _invalidAlpha = -1f;
 
     #endregion
 
@@ -30,26 +30,26 @@ public class FadeOutColor : MonoBehaviour
 
     private void Awake()
     {
-        material = GetComponent<MeshRenderer>().material;
-        originalColor = material.color;
+        _material = GetComponent<MeshRenderer>().material;
+        _originalColor = _material.color;
     }
 
-    IEnumerator FadeOutCoroutine(float alpha, float duration)
+    private IEnumerator FadeOutCoroutine(float alpha, float duration)
     {
         float elapsedTime = 0f;
 
         while (elapsedTime < duration)
         {
             elapsedTime += Time.deltaTime;
-            float newAlpha = Mathf.Lerp(originalColor.a, alpha, elapsedTime / duration);
+            float newAlpha = Mathf.Lerp(_originalColor.a, alpha, elapsedTime / duration);
 
-            Color newColor = new Color(originalColor.r, originalColor.g, originalColor.b, newAlpha);
-            material.color = newColor;
+            Color newColor = new Color(_originalColor.r, _originalColor.g, _originalColor.b, newAlpha);
+            _material.color = newColor;
 
             yield return null;
         }
 
-        material.color = new Color(originalColor.r, originalColor.g, originalColor.b, alpha);
+        _material.color = new Color(_originalColor.r, _originalColor.g, _originalColor.b, alpha);
     }
 
     #endregion
@@ -61,14 +61,14 @@ public class FadeOutColor : MonoBehaviour
 
     #region Public Methods 
 
-    public void StartFadeOut(float alpha = invalidAlpha)
+    public void StartFadeOut(float alpha = _invalidAlpha)
     {
-        if (Mathf.Approximately(alpha, invalidAlpha))
+        if (Mathf.Approximately(alpha, _invalidAlpha))
         {
-            alpha = alphaAlpha;
+            alpha = _alpha;
         }
 
-        StartCoroutine(FadeOutCoroutine(alpha, duradion));
+        StartCoroutine(FadeOutCoroutine(alpha, _duration));
     }
 
     #endregion
