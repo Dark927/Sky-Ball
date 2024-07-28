@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 public class Explosion : MonoBehaviour
@@ -9,7 +10,7 @@ public class Explosion : MonoBehaviour
     #region Fields 
 
     [SerializeField] private float _radius = 14f;
-    [SerializeField] private float _upwardsModifier = 1f;
+    [SerializeField] private float _upwardsModifier = 0.75f;
 
     private FadeOutColor _fadeOut;
 
@@ -26,20 +27,15 @@ public class Explosion : MonoBehaviour
     {
         _fadeOut = GetComponent<FadeOutColor>();
     }
-
-
-    #endregion
-
-
-    // -----------------------------------------------------------------------
-    // Public Methods
-    // -----------------------------------------------------------------------
-
-    #region Public Methods
-
-    public void Explode(float force)
+    
+    private IEnumerator ExplosionRoutine(float force, float timeDelay = 0f)
     {
-        _fadeOut.StartFadeOut();
+        yield return new WaitForSeconds(timeDelay);
+
+        if (_fadeOut != null)
+        {
+            _fadeOut.StartFadeOut();
+        }
 
         Collider[] collidersList = Physics.OverlapSphere(transform.position, _radius);
 
@@ -52,8 +48,20 @@ public class Explosion : MonoBehaviour
                 PushEnemy(enemy, force);
             }
         }
+    }
 
-        //Destroy(gameObject);
+    #endregion
+
+
+    // -----------------------------------------------------------------------
+    // Public Methods
+    // -----------------------------------------------------------------------
+
+    #region Public Methods
+
+    public void Explode(float force, float timeDelay = 0f)
+    {
+        StartCoroutine(ExplosionRoutine(force, timeDelay));
     }
 
     private void PushEnemy(Enemy enemy, float force)
@@ -65,6 +73,12 @@ public class Explosion : MonoBehaviour
         float actualUpwardsModifier = _upwardsModifier * (massMultiplier / 2f);
 
         enemyRb.AddExplosionForce(actualForce, transform.position, _radius, actualUpwardsModifier, ForceMode.Impulse);
+    }
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(transform.position, _radius);
     }
 
     #endregion

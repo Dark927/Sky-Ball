@@ -15,6 +15,7 @@ public class PowerUp : MonoBehaviour
         Strength = 0,
         Rockets = 1,
         Explosion,
+        LightningStrike,
         MassUP,
 
         FirstIndex = 0,

@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using System;
 
 public class PlayerPowerUp : MonoBehaviour
 {
@@ -12,14 +13,21 @@ public class PlayerPowerUp : MonoBehaviour
     // Powers settings 
 
     [Header("Rockets power Settings")]
+    [Space]
 
-    [SerializeField] private GameObject _rocketPrefab;
-
+    [SerializeField] private RocketLauncher _rocketLauncher;
 
     [Header("Explosion power Settings")]
+    [Space]
 
     [SerializeField] private GameObject _explosionPrefab;
 
+    [Header("Lightnings power Settings")]
+    [Space]
+
+    [SerializeField] private LightningsSource _lightningsSource;
+    [SerializeField] private int _minStrikesCount = 1;
+    [SerializeField] private int _maxStrikesCount = 4;
 
     private bool _hasPowerUp = false;
 
@@ -40,7 +48,6 @@ public class PlayerPowerUp : MonoBehaviour
     private Vector3 _indicatorRotation = new Vector3(0, 90f, 0);
 
     private PlayerController _player;
-    private RocketLauncher _rocketLauncher;
 
     #endregion
 
@@ -54,7 +61,6 @@ public class PlayerPowerUp : MonoBehaviour
     {
         _player = GetComponent<PlayerController>();
         _indicatorMaterial = _powerUpIndicator.GetComponent<MeshRenderer>().material;
-        _rocketLauncher = GetComponentInChildren<RocketLauncher>();
 
         if (_rocketLauncher == null)
         {
@@ -115,6 +121,12 @@ public class PlayerPowerUp : MonoBehaviour
                     StartCoroutine(PushExplodeRoutine());
                 }
                 break;
+
+            case PowerUp.TYPE.LightningStrike:
+                {
+                    ActivateLightnings();
+                }
+                break;
         }
     }
 
@@ -122,7 +134,22 @@ public class PlayerPowerUp : MonoBehaviour
     {
         if (_rocketLauncher != null)
         {
-            _rocketLauncher.StartRocketAttack<Enemy>();
+            _rocketLauncher.StartRocketAttack<Enemy>(transform);
+        }
+    }
+
+    private void ActivateLightnings()
+    {
+        if (_lightningsSource != null)
+        {
+            try
+            {
+                _lightningsSource.ActivateLightnings<Enemy>(_powerStrength, _minStrikesCount, _maxStrikesCount);
+            }
+            catch (Exception exception)
+            {
+                Debug.Log($"{gameObject.name} obj. -> {exception.Message}");
+            }
         }
     }
 

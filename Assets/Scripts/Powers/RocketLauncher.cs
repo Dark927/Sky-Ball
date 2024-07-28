@@ -24,7 +24,7 @@ public class RocketLauncher : MonoBehaviour
 
     #region Private Methods
 
-    private IEnumerator LaunchRocketsRoutine<Target>() where Target : MonoBehaviour
+    private IEnumerator LaunchRocketsRoutine<Target>(Transform launchPoint) where Target : MonoBehaviour
     {
         while (true)
         {
@@ -32,7 +32,7 @@ public class RocketLauncher : MonoBehaviour
 
             foreach (Target target in activeTargetsList)
             {
-                LaunchRocket(transform, target.transform);
+                LaunchRocket(launchPoint, target.transform);
             }
 
             yield return new WaitForSeconds(_reloadTime);
@@ -48,9 +48,9 @@ public class RocketLauncher : MonoBehaviour
 
     #region Public Methods 
 
-    public void StartRocketAttack<Target>() where Target : MonoBehaviour
+    public void StartRocketAttack<Target>(Transform launchPoint) where Target : MonoBehaviour
     {
-        StartCoroutine(LaunchRocketsRoutine<Target>());
+        StartCoroutine(LaunchRocketsRoutine<Target>(launchPoint));
     }
 
     public void LaunchRocket(Transform source, Transform target)

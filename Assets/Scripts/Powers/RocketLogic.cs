@@ -30,15 +30,25 @@ public class RocketLogic : MonoBehaviour
     [Header("Main Settings")]
     [Space]
 
-    private Transform _target;
-    private Vector3 _rocketDirection;
-    private Vector3 _explodeBound = new(0, -0.7f, 0);
-
     [SerializeField] private OWNER _rocketOwner = OWNER.FirstIndex;
     [SerializeField] private float _speed = 10f;
     [SerializeField] private float _rocketForce = 2f;
     [SerializeField] private bool _autoAiming = false;
+    [SerializeField] private float _forwardOffsetMultiplier = 1.1f;
 
+    [Header("VFX Settings")]
+    [Space]
+
+    [SerializeField] private GameObject _projectileVFX;
+    [SerializeField] private GameObject _hitVFX;
+
+
+    private Transform _target;
+    private Collider _collider;
+    private Vector3 _rocketDirection;
+    private Vector3 _explodeBound = new(0, -0.7f, 0);
+
+    private bool _exploded = false;
 
     #endregion
 
@@ -47,6 +57,16 @@ public class RocketLogic : MonoBehaviour
     // -----------------------------------------------------------------------
 
     #region Private Methods
+
+    private void Awake()
+    {
+        _collider = GetComponent<Collider>();
+    }
+
+    private void OnEnable()
+    {
+        _projectileVFX.SetActive(true);
+    }
 
     private void Start()
     {
@@ -59,13 +79,46 @@ public class RocketLogic : MonoBehaviour
     // Update is called once per frame
     private void Update()
     {
-        if ((_target == null) || (transform.position.y < _explodeBound.y))
+        if (_exploded)
         {
-            Explode();
+            ConfigureActiveStates();
             return;
         }
 
-        RocketFly(_target);
+
+        bool readyToExplode = ((_target == null) || (transform.position.y < _explodeBound.y));
+
+        if (readyToExplode) Explode();
+        else RocketFly(_target);
+    }
+
+    private void ConfigureActiveStates()
+    {
+        if (!IsRocketEffectsActive())
+        {
+            _hitVFX.SetActive(false);
+            gameObject.SetActive(false);
+            _exploded = false;
+            _collider.enabled = true;
+        }
+    }
+
+    private bool IsRocketEffectsActive()
+    {
+        if (_hitVFX.activeInHierarchy)
+        {
+            ParticleSystem[] allParticles = _hitVFX.GetComponentsInChildren<ParticleSystem>();
+
+            foreach (ParticleSystem particles in allParticles)
+            {
+                if (particles.IsAlive())
+                {
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
 
     private void RocketFly(Transform target)
@@ -94,44 +147,78 @@ public class RocketLogic : MonoBehaviour
         transform.LookAt(target);
     }
 
-    private void OnTriggerEnter(Collider target—ollider)
+    private void OnCollisionEnter(Collision collision)
     {
+        GameObject targetObject = collision.gameObject;
+
         switch (_rocketOwner)
         {
             case OWNER.Player:
                 {
-                    PushTarget<Enemy>(target—ollider);
+                    PushTarget<Enemy>(targetObject);
                 }
                 break;
 
 
             case OWNER.Enemy:
                 {
-                    PushTarget<PlayerController>(target—ollider);
+                    PushTarget<PlayerController>(targetObject);
                 }
                 break;
         }
+
+        // Explode rocket 
+
+        ContactPoint contactPoint = collision.contacts[0];
+        Vector3 position = contactPoint.point;
+        Quaternion rotation = Quaternion.FromToRotation(Vector3.up, contactPoint.normal);
+
+        Explode(position, rotation);
     }
 
-    private void PushTarget<Target>(Collider targetCollider) where Target : MonoBehaviour
+    private void PushTarget<Target>(GameObject targetObject) where Target : MonoBehaviour
     {
-        Target target = targetCollider.GetComponent<Target>();
+        Target target = targetObject.GetComponent<Target>();
 
         if (target != null)
         {
             Rigidbody targetRb = target.GetComponent<Rigidbody>();
             Vector3 pushDirection = (target.transform.position - transform.position).normalized;
 
-            targetRb.AddForce(pushDirection * _rocketForce, ForceMode.Impulse);
-            Explode();
+            targetRb.AddForce(pushDirection * _rocketForce * targetRb.mass, ForceMode.Impulse);
         }
+    }
+
+    private void Explode(Vector3 position, Quaternion rotation)
+    {
+        SetExplosionSettings();
+        PlayHitVFX(position, rotation);
     }
 
     private void Explode()
     {
-        Destroy(gameObject);
+        SetExplosionSettings();
+        PlayHitVFX(transform.position, transform.rotation);
     }
 
+    private void SetExplosionSettings()
+    {
+        _exploded = true;
+        _collider.enabled = false;
+        _projectileVFX.SetActive(false);
+    }
+
+    private void PlayHitVFX(Vector3 position, Quaternion rotation)
+    {
+        if (_hitVFX != null)
+        {
+            position += transform.forward * _forwardOffsetMultiplier;
+
+            _hitVFX.transform.position = position;
+            _hitVFX.transform.rotation = rotation;
+            _hitVFX.SetActive(true);
+        }
+    }
 
     #endregion
 

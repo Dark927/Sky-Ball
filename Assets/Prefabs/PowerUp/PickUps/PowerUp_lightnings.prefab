@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 4713745802461807359}
   - component: {fileID: 494311072426313884}
   m_Layer: 0
-  m_Name: PowerUp_strength
+  m_Name: PowerUp_lightnings
   m_TagString: Powerup
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -110,8 +110,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 565e431cd28cf6c46aa62c0eca85bd05, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _powerType: 0
-  _powerUpActiveTime: 8
+  _powerType: 3
+  _powerUpActiveTime: 2.5
   _powerUpStrength: 10
   _powerUpReloadTime: 0
   _indicatorColor: {r: 1, g: 0.80214703, b: 0, a: 1}

@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 
@@ -47,12 +45,24 @@ public class Enemy : MonoBehaviour
     private Rigidbody _rb;
     private Vector3 _moveDirection = Vector3.zero;
 
-    private RocketLauncher _rocketLauncher;
-
     [Space]
     [Header("Destroy bounds Settings")]
 
     [SerializeField] private float _deathBoundY = -10f;
+
+    #endregion
+
+
+    // -----------------------------------------------------------------------
+    // Private Methods
+    // -----------------------------------------------------------------------
+
+    #region Protected Methods
+
+    protected virtual void Start()
+    {
+        _playerTransform = FindObjectOfType<PlayerController>().transform;
+    }
 
     #endregion
 
@@ -66,17 +76,6 @@ public class Enemy : MonoBehaviour
     private void Awake()
     {
         _rb = GetComponent<Rigidbody>();
-        _rocketLauncher = GetComponentInChildren<RocketLauncher>();
-    }
-
-    private void Start()
-    {
-        if(_rocketLauncher != null)
-        {
-            _rocketLauncher.StartRocketAttack<PlayerController>();
-        }
-
-        _playerTransform = FindObjectOfType<PlayerController>().transform;
     }
 
     private void Update()
@@ -89,12 +88,10 @@ public class Enemy : MonoBehaviour
         _moveDirection = (_playerTransform.position - transform.position).normalized;
     }
 
-
     private void FixedUpdate()
     {
         _rb.AddForce(_moveDirection * _basicSpeed);
     }
-
 
     private void OnCollisionEnter(Collision collision)
     {
@@ -125,7 +122,8 @@ public class Enemy : MonoBehaviour
     public void DestroyEnemy()
     {
         // TODO : Add score for player 
-        Destroy(gameObject);
+
+        Destroy(transform.root.gameObject);
     }
 
     public TYPE GetEnemyType()
@@ -140,5 +138,4 @@ public class Enemy : MonoBehaviour
     }
 
     #endregion
-
 }

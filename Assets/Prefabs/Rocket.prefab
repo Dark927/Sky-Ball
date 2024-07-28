@@ -93,7 +93,7 @@ CapsuleCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6040045791043470375}
   m_Material: {fileID: 0}
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_Enabled: 1
   m_Radius: 0.5
   m_Height: 1
@@ -115,3 +115,5 @@ MonoBehaviour:
   _speed: 16
   _rocketForce: 5
   _autoAiming: 1
+  _forwardOffsetMultiplier: 0
+  _hitVFX: {fileID: 0}

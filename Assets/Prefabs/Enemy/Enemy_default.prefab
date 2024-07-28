@@ -128,6 +128,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _type: 0
-  _basicSpeed: 4
+  _basicSpeed: 2
   _pushForce: 1
   _deathBoundY: -10

@@ -23,7 +23,7 @@ public class DifficultyManager : MonoBehaviour
 
     #region Fields
 
-    private int _enemiesToSpawn = 1;
+    private int _enemiesToSpawn = 2;
     private int _waveCount = 0;
     private int _increaseEnemyCountInterval = 3;
 
