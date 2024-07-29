@@ -10,8 +10,7 @@ public class ObjectsPool : MonoBehaviour
 
     #region Fields
 
-    [SerializeField] private GameObject _objectPrefab;
-    [SerializeField] private int _startCount;
+    [SerializeField] private List<PoolObjectData> _objectsDataList;
 
     private List<GameObject> _pool;
 
@@ -28,24 +27,28 @@ public class ObjectsPool : MonoBehaviour
     private void Awake()
     {
         _pool = new();
-    }
-
-    private void Start()
-    {
         InitPool();
     }
 
     private void InitPool()
     {
-        for (int i = 0; i < _startCount; ++i)
+        foreach (PoolObjectData objectData in _objectsDataList)
         {
-            AddNewElement();
+            GameObject objectsContainer = new(objectData.Title);
+            objectsContainer.transform.parent = transform;
+
+            for (int currentIndex = 0; currentIndex < objectData.CountToCreate; ++currentIndex)
+            {
+                AddNewElement(objectData.Prefab, objectsContainer.transform);
+            }
         }
     }
 
-    private GameObject AddNewElement()
+    private GameObject AddNewElement(GameObject newElement, Transform parent = null)
     {
-        GameObject newObject = Instantiate(_objectPrefab, transform.position, Quaternion.identity, transform);
+        if (parent == null) parent = transform;
+
+        GameObject newObject = Instantiate(newElement, transform.position, Quaternion.identity, parent);
         newObject.SetActive(false);
         _pool.Add(newObject);
 
@@ -62,9 +65,9 @@ public class ObjectsPool : MonoBehaviour
     #region Public Methods
     public GameObject RequestInactiveObject(bool allowExpansion = false)
     {
-        foreach(GameObject element in _pool)
+        foreach (GameObject element in _pool)
         {
-            if(!element.activeInHierarchy)
+            if (!element.activeInHierarchy)
             {
                 return element;
             }
@@ -73,9 +76,12 @@ public class ObjectsPool : MonoBehaviour
 
         // Create new element if all elements are active.
 
-        if(allowExpansion)
+        if (allowExpansion)
         {
-            return AddNewElement();
+            if (_objectsDataList.Count != 0)
+            {
+                return AddNewElement(_objectsDataList[0].Prefab, transform.GetChild(0).transform);
+            }
         }
 
 

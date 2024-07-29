@@ -1,26 +1,8 @@
-using System.Collections.Generic;
-using UnityEngine;
 
-public class FinishExplosionEffect : MonoBehaviour
+public class FinishExplosionEffect : FinishDefaultEffect
 {
-    List<ParticleSystem> _particleSystems;
-
-    private void Awake()
+    protected override void SetFinishOptions()
     {
-        _particleSystems = new(GetComponentsInChildren<ParticleSystem>());
-
-    }
-
-    private void Update()
-    {
-        foreach (ParticleSystem particles in _particleSystems)
-        {
-            if (particles.IsAlive())
-            {
-                return;
-            }
-        }
-
         Explosion sourceExplosion = GetComponentInParent<Explosion>();
 
         if (sourceExplosion != null)

@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class EnemyRange : Enemy
+public class EnemyRangeHead : EnemyDefaultHead
 {
     // -----------------------------------------------------------------------
     // Fields 
@@ -8,28 +8,26 @@ public class EnemyRange : Enemy
 
     #region Fields
 
-    [Header("Rockets Settings")]
     [Space]
+    [Header("Powers Settings")]
 
     [SerializeField] private RocketLauncher _rocketLauncher;
+
+    public EnemyBody Body => _body;
+
 
     #endregion
 
 
     // -----------------------------------------------------------------------
-    // Protected Methods
+    // Private Methods
     // -----------------------------------------------------------------------
 
-    #region Protected Methods
+    #region Private Methods
 
-    protected override void Start()
+    private void Start()
     {
-        base.Start();
-
-        if (_rocketLauncher != null)
-        {
-            _rocketLauncher.StartRocketAttack<PlayerController>(transform);
-        }
+        _rocketLauncher.StartRocketAttack<PlayerController>();
     }
 
     #endregion

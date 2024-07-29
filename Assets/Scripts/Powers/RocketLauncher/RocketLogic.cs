@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 public class RocketLogic : MonoBehaviour
@@ -52,19 +53,34 @@ public class RocketLogic : MonoBehaviour
 
     #endregion
 
+
+    // -----------------------------------------------------------------------
+    // Public Methods
+    // -----------------------------------------------------------------------
+
+    #region Public Methods
+
+    public void SetTarget(Transform target)
+    {
+        _target = target;
+    }
+
+    #endregion
+
+
     // -----------------------------------------------------------------------
     // Private Methods
     // -----------------------------------------------------------------------
 
     #region Private Methods
 
-    private void Awake()
-    {
-        _collider = GetComponent<Collider>();
-    }
-
     private void OnEnable()
     {
+        if (_target != null)
+        {
+            CalculateAutoAim(_target);
+        }
+
         _projectileVFX.SetActive(true);
     }
 
@@ -74,33 +90,23 @@ public class RocketLogic : MonoBehaviour
         {
             CalculateAutoAim(_target);
         }
+
+        _projectileVFX.SetActive(true);
     }
 
-    // Update is called once per frame
+    private void Awake()
+    {
+        _collider = GetComponent<Collider>();
+    }
+
     private void Update()
     {
-        if (_exploded)
-        {
-            ConfigureActiveStates();
-            return;
-        }
-
+        if (_exploded) return;
 
         bool readyToExplode = ((_target == null) || (transform.position.y < _explodeBound.y));
 
         if (readyToExplode) Explode();
         else RocketFly(_target);
-    }
-
-    private void ConfigureActiveStates()
-    {
-        if (!IsRocketEffectsActive())
-        {
-            _hitVFX.SetActive(false);
-            gameObject.SetActive(false);
-            _exploded = false;
-            _collider.enabled = true;
-        }
     }
 
     private bool IsRocketEffectsActive()
@@ -128,7 +134,7 @@ public class RocketLogic : MonoBehaviour
             CalculateAutoAim(target);
         }
 
-        transform.position += (_rocketDirection * _speed * Time.deltaTime);
+        transform.Translate(_rocketDirection * _speed * Time.deltaTime, Space.World);
     }
 
     private void CalculateAutoAim(Transform target)
@@ -155,13 +161,17 @@ public class RocketLogic : MonoBehaviour
         {
             case OWNER.Player:
                 {
-                    PushTarget<Enemy>(targetObject);
+                    if (HasComponentOfType<PlayerController>(targetObject)) return;
+
+                    PushTarget<EnemyBody>(targetObject);
                 }
                 break;
 
 
             case OWNER.Enemy:
                 {
+                    if (HasComponentOfType<EnemyBody>(targetObject)) return;
+
                     PushTarget<PlayerController>(targetObject);
                 }
                 break;
@@ -174,6 +184,11 @@ public class RocketLogic : MonoBehaviour
         Quaternion rotation = Quaternion.FromToRotation(Vector3.up, contactPoint.normal);
 
         Explode(position, rotation);
+    }
+
+    private bool HasComponentOfType<Type>(GameObject targetObject) where Type : MonoBehaviour
+    {
+        return (targetObject.GetComponent<Type>() != null);
     }
 
     private void PushTarget<Target>(GameObject targetObject) where Target : MonoBehaviour
@@ -193,12 +208,14 @@ public class RocketLogic : MonoBehaviour
     {
         SetExplosionSettings();
         PlayHitVFX(position, rotation);
+        StartCoroutine(ConfigureActiveStates());
     }
 
     private void Explode()
     {
         SetExplosionSettings();
         PlayHitVFX(transform.position, transform.rotation);
+        StartCoroutine(ConfigureActiveStates());
     }
 
     private void SetExplosionSettings()
@@ -206,6 +223,25 @@ public class RocketLogic : MonoBehaviour
         _exploded = true;
         _collider.enabled = false;
         _projectileVFX.SetActive(false);
+    }
+
+    private IEnumerator ConfigureActiveStates()
+    {
+        while (IsRocketEffectsActive())
+        {
+            yield return null;
+        }
+
+        ResetSettings();
+    }
+
+    private void ResetSettings()
+    {
+        _hitVFX.SetActive(false);
+        gameObject.SetActive(false);
+        _exploded = false;
+
+        _collider.enabled = true;
     }
 
     private void PlayHitVFX(Vector3 position, Quaternion rotation)
@@ -218,19 +254,6 @@ public class RocketLogic : MonoBehaviour
             _hitVFX.transform.rotation = rotation;
             _hitVFX.SetActive(true);
         }
-    }
-
-    #endregion
-
-    // -----------------------------------------------------------------------
-    // Public Methods
-    // -----------------------------------------------------------------------
-
-    #region Public Methods
-
-    public void SetTarget(Transform target)
-    {
-        _target = target;
     }
 
     #endregion

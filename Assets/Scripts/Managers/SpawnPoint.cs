@@ -37,7 +37,7 @@ public class SpawnPoint : MonoBehaviour
 
     private bool IsEnemy(Collider collision)
     {
-        return (collision.gameObject.GetComponent<Enemy>() != null);
+        return (collision.gameObject.GetComponent<EnemyDefaultHead>() != null);
     }
 
     #endregion

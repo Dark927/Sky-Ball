@@ -18,6 +18,20 @@ public class Explosion : MonoBehaviour
 
 
     // -----------------------------------------------------------------------
+    // Public Methods
+    // -----------------------------------------------------------------------
+
+    #region Public Methods
+
+    public void Explode(float force, float timeDelay = 0f)
+    {
+        StartCoroutine(ExplosionRoutine(force, timeDelay));
+    }
+
+    #endregion
+
+
+    // -----------------------------------------------------------------------
     // Private Methods
     // -----------------------------------------------------------------------
 
@@ -41,7 +55,7 @@ public class Explosion : MonoBehaviour
 
         foreach (Collider collider in collidersList)
         {
-            Enemy enemy = collider.GetComponent<Enemy>();
+            EnemyBody enemy = collider.GetComponent<EnemyBody>();
 
             if (enemy != null)
             {
@@ -50,21 +64,7 @@ public class Explosion : MonoBehaviour
         }
     }
 
-    #endregion
-
-
-    // -----------------------------------------------------------------------
-    // Public Methods
-    // -----------------------------------------------------------------------
-
-    #region Public Methods
-
-    public void Explode(float force, float timeDelay = 0f)
-    {
-        StartCoroutine(ExplosionRoutine(force, timeDelay));
-    }
-
-    private void PushEnemy(Enemy enemy, float force)
+    private void PushEnemy(EnemyBody enemy, float force)
     {
         Rigidbody enemyRb = enemy.GetComponent<Rigidbody>();
 

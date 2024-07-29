@@ -12,8 +12,8 @@ public class EnemyGroup : MonoBehaviour
     [Header("Group Settings")]
     [Space]
 
-    [SerializeField] private Enemy _groupLeader;
-    [SerializeField] private List<Enemy> _groupMembers;
+    [SerializeField] private EnemyDefaultHead _groupLeader;
+    [SerializeField] private List<EnemyDefaultHead> _groupMembers;
 
     private bool _hasLeader = false;
 
@@ -44,11 +44,11 @@ public class EnemyGroup : MonoBehaviour
 
     private void DestroyGroup()
     {
-        foreach (Enemy member in _groupMembers)
+        foreach (EnemyDefaultHead member in _groupMembers)
         {
             if (member != null)
             {
-                member.DestroyEnemy();
+                member.Deactivate();
             }
         }
         Destroy(gameObject);

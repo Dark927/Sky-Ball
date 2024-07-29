@@ -51,7 +51,7 @@ public class DifficultyManager : MonoBehaviour
         return WaveType.Hard;
     }
 
-    private List<GameObject> GenerateAvailableEnemyList(List<GameObject> allEnemyPrefabs, List<Enemy.TYPE> enemyTypesToSpawn)
+    private List<GameObject> GenerateAvailableEnemyList(List<GameObject> allEnemyPrefabs, List<EnemyDefaultHead.TYPE> enemyTypesToSpawn)
     {
         List<GameObject> availableEnemyList = new();
 
@@ -68,15 +68,15 @@ public class DifficultyManager : MonoBehaviour
         return availableEnemyList;
     }
 
-    private bool CompareEnemyByType(GameObject enemyPrefab, List<Enemy.TYPE> enemyTypes)
+    private bool CompareEnemyByType(GameObject enemyPrefab, List<EnemyDefaultHead.TYPE> enemyTypes)
     {
         // Get enemy type 
 
-        Enemy.TYPE type = CheckEnemyType(enemyPrefab);
+        EnemyDefaultHead.TYPE type = CheckEnemyType(enemyPrefab);
 
         // Compare enemy type with available enemy types 
 
-        foreach (Enemy.TYPE enemyType in enemyTypes)
+        foreach (EnemyDefaultHead.TYPE enemyType in enemyTypes)
         {
             if (type == enemyType)
             {
@@ -87,25 +87,25 @@ public class DifficultyManager : MonoBehaviour
         return false;
     }
 
-    private Enemy.TYPE CheckEnemyType(GameObject enemyPrefab)
+    private EnemyDefaultHead.TYPE CheckEnemyType(GameObject enemyPrefab)
     {
         // Try get enemy component from prefab 
 
-        Enemy enemy = enemyPrefab.GetComponent<Enemy>();
+        EnemyDefaultHead enemy = enemyPrefab.GetComponent<EnemyDefaultHead>();
 
         if (enemy == null)
         {
-            enemy = enemyPrefab.GetComponentInChildren<Enemy>();
+            enemy = enemyPrefab.GetComponentInChildren<EnemyDefaultHead>();
         }
 
         // Return enemy type 
 
         if (enemy != null)
         {
-            return enemy.GetEnemyType();
+            return enemy.Type;
         }
 
-        return Enemy.TYPE.Default;
+        return EnemyDefaultHead.TYPE.Default;
     }
 
     #endregion
@@ -141,28 +141,28 @@ public class DifficultyManager : MonoBehaviour
             default:
             case WaveType.Start:
                 {
-                    List<Enemy.TYPE> enemyTypesToSpawn = new List<Enemy.TYPE> { Enemy.TYPE.Default };
+                    List<EnemyDefaultHead.TYPE> enemyTypesToSpawn = new List<EnemyDefaultHead.TYPE> { EnemyDefaultHead.TYPE.Default };
                     return GenerateAvailableEnemyList(allEnemyPrefabs, enemyTypesToSpawn);
                 }
 
             case WaveType.Easy:
                 {
-                    List<Enemy.TYPE> enemyTypesToSpawn = new List<Enemy.TYPE> { Enemy.TYPE.Default, Enemy.TYPE.Fast, Enemy.TYPE.Range };
+                    List<EnemyDefaultHead.TYPE> enemyTypesToSpawn = new List<EnemyDefaultHead.TYPE> { EnemyDefaultHead.TYPE.Default, EnemyDefaultHead.TYPE.Fast, EnemyDefaultHead.TYPE.Range };
                     return GenerateAvailableEnemyList(allEnemyPrefabs, enemyTypesToSpawn);
                 }
             case WaveType.Medium:
                 {
-                    List<Enemy.TYPE> enemyTypesToSpawn = new List<Enemy.TYPE> { Enemy.TYPE.Default, Enemy.TYPE.Fast, Enemy.TYPE.Powerful };
+                    List<EnemyDefaultHead.TYPE> enemyTypesToSpawn = new List<EnemyDefaultHead.TYPE> { EnemyDefaultHead.TYPE.Default, EnemyDefaultHead.TYPE.Fast, EnemyDefaultHead.TYPE.Heavy };
                     return GenerateAvailableEnemyList(allEnemyPrefabs, enemyTypesToSpawn);
                 }
             case WaveType.Hard:
                 {
-                    List<Enemy.TYPE> enemyTypesToSpawn = new List<Enemy.TYPE> { Enemy.TYPE.Fast, Enemy.TYPE.Powerful, Enemy.TYPE.Group, Enemy.TYPE.Range };
+                    List<EnemyDefaultHead.TYPE> enemyTypesToSpawn = new List<EnemyDefaultHead.TYPE> { EnemyDefaultHead.TYPE.Fast, EnemyDefaultHead.TYPE.Heavy, EnemyDefaultHead.TYPE.Group, EnemyDefaultHead.TYPE.Range };
                     return GenerateAvailableEnemyList(allEnemyPrefabs, enemyTypesToSpawn);
                 }
             case WaveType.Boss:
                 {
-                    List<Enemy.TYPE> enemyTypesToSpawn = new List<Enemy.TYPE> { Enemy.TYPE.Boss };
+                    List<EnemyDefaultHead.TYPE> enemyTypesToSpawn = new List<EnemyDefaultHead.TYPE> { EnemyDefaultHead.TYPE.Boss };
                     return GenerateAvailableEnemyList(allEnemyPrefabs, enemyTypesToSpawn);
                 }
         }

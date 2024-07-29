@@ -71,6 +71,12 @@ public class PlayerPowerUp : MonoBehaviour
     private void Update()
     {
         ConfigureIndicator();
+        UpdateRocketLauncherPosition();
+    }
+
+    private void UpdateRocketLauncherPosition()
+    {
+        _rocketLauncher.transform.position = new Vector3(transform.position.x, 0f, transform.position.z);
     }
 
     private void ConfigureIndicator()
@@ -134,7 +140,7 @@ public class PlayerPowerUp : MonoBehaviour
     {
         if (_rocketLauncher != null)
         {
-            _rocketLauncher.StartRocketAttack<Enemy>(transform);
+            _rocketLauncher.StartRocketAttack<EnemyMovement>();
         }
     }
 
@@ -144,7 +150,7 @@ public class PlayerPowerUp : MonoBehaviour
         {
             try
             {
-                _lightningsSource.ActivateLightnings<Enemy>(_powerStrength, _minStrikesCount, _maxStrikesCount);
+                _lightningsSource.ActivateLightnings<EnemyBody>(_powerStrength, _minStrikesCount, _maxStrikesCount);
             }
             catch (Exception exception)
             {
@@ -166,7 +172,7 @@ public class PlayerPowerUp : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        Enemy enemy = collision.gameObject.GetComponent<Enemy>();
+        EnemyBody enemy = collision.gameObject.GetComponent<EnemyBody>();
 
         if ((enemy != null) && _hasPowerUp)
         {

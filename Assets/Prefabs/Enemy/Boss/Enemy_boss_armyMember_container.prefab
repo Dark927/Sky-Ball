@@ -141,6 +141,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7244721320580739809}
+  - component: {fileID: 829417404114336810}
   - component: {fileID: 7244721320580739808}
   m_Layer: 0
   m_Name: Rocket_launcher
@@ -164,6 +165,20 @@ Transform:
   m_Father: {fileID: 7244721320685922540}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &829417404114336810
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7244721320580739822}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0a90413f4ebe89047a52eefa9a63134f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _objectsDataList:
+  - {fileID: 11400000, guid: 5b039accc7d8d794bbcbe4ab60f55c0d, type: 2}
 --- !u!114 &7244721320580739808
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -176,7 +191,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f9674cb6575c41e4581d0aa096a92452, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _rocketPrefab: {fileID: 914768293761685163, guid: 5b7d11bc1fff13947bbf50129b5a17ff, type: 3}
   _reloadTime: 2
 --- !u!1 &7244721320685922541
 GameObject:

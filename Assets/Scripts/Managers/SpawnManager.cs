@@ -72,7 +72,7 @@ public class SpawnManager : MonoBehaviour
 
     private void NextWave()
     {
-        _activeEnemies = FindObjectsOfType<Enemy>().Length;
+        _activeEnemies = FindObjectsOfType<EnemyDefaultHead>().Length;
 
         if (_activeEnemies == 0)
         {
@@ -170,7 +170,7 @@ public class SpawnManager : MonoBehaviour
         // Generate random accessible position if all spawners are blocked 
         else
         {
-            Vector3 actualSpawnPosition = CalculateRandomSpawnPosition<Enemy>(enemyToSpawn);
+            Vector3 actualSpawnPosition = CalculateRandomSpawnPosition<EnemyDefaultHead>(enemyToSpawn);
 
             // Spawn object only at correct positions
 

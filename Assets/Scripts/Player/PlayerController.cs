@@ -12,6 +12,7 @@ public class PlayerController : MonoBehaviour
 
     [SerializeField] private float _basicSpeed = 5f;
     [SerializeField] private Transform _focalPoint;
+    [SerializeField] private float _pushForce = 2f;
     private Rigidbody _playerRb;
 
     private float _forwardInput = 0;
@@ -31,12 +32,12 @@ public class PlayerController : MonoBehaviour
     private void Awake()
     {
         _playerRb = GetComponent<Rigidbody>();
-        _playerRb.WakeUp();
+        _playerRb.sleepThreshold = 0.0f;
     }
 
     private void Update()
     {
-        if(transform.position.y < _fallBoundY)
+        if (transform.position.y < _fallBoundY)
         {
             RestartGame();
         }
@@ -85,6 +86,8 @@ public class PlayerController : MonoBehaviour
     {
         return _onGround;
     }
+
+    public float PushForce => _pushForce;
 
     #endregion
 }

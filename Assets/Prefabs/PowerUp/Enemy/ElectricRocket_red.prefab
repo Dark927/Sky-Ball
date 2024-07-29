@@ -78,10 +78,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: vfx_Hit_Electric_small_red
       objectReference: {fileID: 0}
-    - target: {fileID: 3882183276293514058, guid: 1844d01bc4dc73f4d9fe16ea9e7bec19, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 3882183276293514061, guid: 1844d01bc4dc73f4d9fe16ea9e7bec19, type: 3}
       propertyPath: m_RootOrder
       value: 1
@@ -192,10 +188,6 @@ PrefabInstance:
     - target: {fileID: 1016448614727636132, guid: f6f12eb4cf9813946b6e652420ffb16b, type: 3}
       propertyPath: m_Name
       value: vfx_Projectile_Electric_small_red
-      objectReference: {fileID: 0}
-    - target: {fileID: 1016448614727636132, guid: f6f12eb4cf9813946b6e652420ffb16b, type: 3}
-      propertyPath: m_IsActive
-      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f6f12eb4cf9813946b6e652420ffb16b, type: 3}
