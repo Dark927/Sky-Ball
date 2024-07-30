@@ -1291,8 +1291,7 @@ MonoBehaviour:
   - {fileID: 1233643210418099694, guid: aebf029b97e5915459bd94d88a87a7af, type: 3}
   _maxEnemiesCount: 25
   _powerUpPrefabs:
-  - {fileID: 8953572900643263059, guid: cb53e2e45c3c9e645afeecb1a3568ddf, type: 3}
-  - {fileID: 7987662296448544420, guid: 71a97f6031b265141bc7acfa587e6ee9, type: 3}
+  - {fileID: 5947052775715003943, guid: 0d1fb8ebd37e1e446a1e81a8b0ed9cf6, type: 3}
   _maxPowerUpsCount: 5
   _powerUpsToSpawn: 1
   _safeDistance: 3

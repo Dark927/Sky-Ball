@@ -4901,7 +4901,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 3692072976794999601}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!198 &6323453863799997839
 ParticleSystem:
@@ -14642,9 +14642,9 @@ Transform:
   m_Children:
   - {fileID: 7399406462616076456}
   - {fileID: 3692072977377744584}
+  - {fileID: 7399406461497681949}
   - {fileID: 9182759736587459340}
   - {fileID: 7399406462926112811}
-  - {fileID: 7399406461497681949}
   - {fileID: 7399406461256376288}
   - {fileID: 4526344048893514735}
   - {fileID: 7399406461542914603}
@@ -43792,7 +43792,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 3692072976794999601}
-  m_RootOrder: 4
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!198 &7399406461497681947
 ParticleSystem:
@@ -45299,7 +45299,7 @@ ParticleSystem:
     rowIndex: 0
     cycles: 1
     uvChannelMask: -1
-    rowMode: 1
+    rowMode: 2
     sprites:
     - sprite: {fileID: 0}
     flipU: 0
@@ -73012,7 +73012,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 3692072976794999601}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: -90, y: 0, z: 0}
 --- !u!198 &7399406462926112809
 ParticleSystem:
