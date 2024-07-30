@@ -153,9 +153,9 @@ public class RocketLogic : MonoBehaviour
         transform.LookAt(target);
     }
 
-    private void OnCollisionEnter(Collision collision)
+    private void OnTriggerEnter(Collider other)
     {
-        GameObject targetObject = collision.gameObject;
+        GameObject targetObject = other.gameObject;
 
         switch (_rocketOwner)
         {
@@ -179,9 +179,8 @@ public class RocketLogic : MonoBehaviour
 
         // Explode rocket 
 
-        ContactPoint contactPoint = collision.contacts[0];
-        Vector3 position = contactPoint.point;
-        Quaternion rotation = Quaternion.FromToRotation(Vector3.up, contactPoint.normal);
+        Vector3 position = _collider.ClosestPoint(other.transform.position);
+        Quaternion rotation = Quaternion.FromToRotation(Vector3.up, position);
 
         Explode(position, rotation);
     }

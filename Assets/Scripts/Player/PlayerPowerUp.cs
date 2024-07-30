@@ -20,7 +20,10 @@ public class PlayerPowerUp : MonoBehaviour
     [Header("Explosion power Settings")]
     [Space]
 
-    [SerializeField] private GameObject _explosionPrefab;
+    [SerializeField] private ExplosionsSource _explosionsSource;
+    private float _jumpForceMultiplier = 50f;
+    private float _checkGroundTimeDelay = 1f;
+    private Vector3 _explosionPositionOffset = new Vector3(0f, 0.1f, 0f);
 
     [Header("Lightnings power Settings")]
     [Space]
@@ -48,6 +51,7 @@ public class PlayerPowerUp : MonoBehaviour
     private Vector3 _indicatorRotation = new Vector3(0, 90f, 0);
 
     private PlayerController _player;
+    private Collider _collider;
 
     #endregion
 
@@ -60,6 +64,7 @@ public class PlayerPowerUp : MonoBehaviour
     private void Awake()
     {
         _player = GetComponent<PlayerController>();
+        _collider = GetComponent<Collider>();
         _indicatorMaterial = _powerUpIndicator.GetComponent<MeshRenderer>().material;
 
         if (_rocketLauncher == null)
@@ -124,7 +129,7 @@ public class PlayerPowerUp : MonoBehaviour
 
             case PowerUp.TYPE.Explosion:
                 {
-                    StartCoroutine(PushExplodeRoutine());
+                    StartCoroutine(JumpAndExplodeRoutine());
                 }
                 break;
 
@@ -194,21 +199,22 @@ public class PlayerPowerUp : MonoBehaviour
         }
     }
 
-    private IEnumerator PushExplodeRoutine()
+    private IEnumerator JumpAndExplodeRoutine()
     {
         Rigidbody playerRb = _player.GetComponent<Rigidbody>();
-        playerRb.AddForce(Vector3.up * _powerStrength * 50 * Time.deltaTime, ForceMode.Impulse);
+        playerRb.AddForce(Vector3.up * _powerStrength * _jumpForceMultiplier * Time.deltaTime, ForceMode.Impulse);
 
-        yield return new WaitForSeconds(1);
+        yield return new WaitForSeconds(_checkGroundTimeDelay);
+        while (!_player.OnGround) yield return null;
 
-        do
+        if (_explosionsSource != null)
         {
-            yield return null;
-        } while (!_player.OnGround());
-
-        Vector3 cameraViewOffset = new Vector3(0, 0, -1.5f);
-        GameObject explosionObj = Instantiate(_explosionPrefab, transform.position + cameraViewOffset, Quaternion.identity, transform.parent);
-        explosionObj.GetComponent<Explosion>().Explode(_powerStrength);
+            _explosionsSource.ActivateExplosion(_player.GroundContactPoint + _explosionPositionOffset, _powerStrength);
+        }
+        else
+        {
+            Debug.Log($"# Error : {nameof(_explosionsSource)} == null. Explosion can not be executed. - {gameObject.name}");
+        }
     }
 
     private IEnumerator PowerupCountdownRoutine(float powerupActiveTime)

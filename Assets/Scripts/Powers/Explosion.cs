@@ -46,10 +46,7 @@ public class Explosion : MonoBehaviour
     {
         yield return new WaitForSeconds(timeDelay);
 
-        if (_fadeOut != null)
-        {
-            _fadeOut.StartFadeOut();
-        }
+        TryFadeOut();
 
         Collider[] collidersList = Physics.OverlapSphere(transform.position, _radius);
 
@@ -61,6 +58,14 @@ public class Explosion : MonoBehaviour
             {
                 PushEnemy(enemy, force);
             }
+        }
+    }
+
+    private void TryFadeOut()
+    {
+        if (_fadeOut != null)
+        {
+            _fadeOut.StartFadeOut();
         }
     }
 

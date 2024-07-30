@@ -10,15 +10,37 @@ public class PlayerController : MonoBehaviour
 
     #region Fields 
 
+    [Header("Main Settings")]
+    [Space]
+
     [SerializeField] private float _basicSpeed = 5f;
     [SerializeField] private Transform _focalPoint;
     [SerializeField] private float _pushForce = 2f;
+
+    [Space]
+
+    [SerializeField] private string _groundTag = "Ground";
+    private bool _onGround = true;
+    private Vector3 _groundContactPoint;
+
     private Rigidbody _playerRb;
 
     private float _forwardInput = 0;
-    private bool _onGround = true;
 
-    [SerializeField] private float _fallBoundY = -5f; 
+    [SerializeField] private float _fallBoundY = -5f;
+
+    #endregion
+
+
+    // -----------------------------------------------------------------------
+    // Public Methods
+    // -----------------------------------------------------------------------
+
+    #region Public Methods
+
+    public bool OnGround => _onGround;
+    public float PushForce => _pushForce;
+    public Vector3 GroundContactPoint => _groundContactPoint;
 
     #endregion
 
@@ -52,15 +74,16 @@ public class PlayerController : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.CompareTag("Ground"))
+        if (collision.gameObject.CompareTag(_groundTag))
         {
             _onGround = true;
+            _groundContactPoint = collision.GetContact(0).point;
         }
     }
 
     private void OnCollisionExit(Collision collision)
     {
-        if (collision.gameObject.CompareTag("Ground"))
+        if (collision.gameObject.CompareTag(_groundTag))
         {
             _onGround = false;
         }
@@ -72,22 +95,6 @@ public class PlayerController : MonoBehaviour
         Scene currentScene = SceneManager.GetActiveScene();
         SceneManager.LoadScene(currentScene.name);
     }
-
-    #endregion
-
-
-    // -----------------------------------------------------------------------
-    // Public Methods
-    // -----------------------------------------------------------------------
-
-    #region Public Methods
-
-    public bool OnGround()
-    {
-        return _onGround;
-    }
-
-    public float PushForce => _pushForce;
 
     #endregion
 }
