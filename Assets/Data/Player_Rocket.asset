@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: Player_Rocket
   m_EditorClassIdentifier: 
   _title: Electric Rocket
-  _prefab: {fileID: 8794873367959105724, guid: fb906b3c83ab7d44b821a39fdbbb1c02, type: 3}
+  _prefab: {fileID: 5261458411747189888, guid: 783322b85e7cce04da3d6bc7f544ec07, type: 3}
   _countToCreate: 2
