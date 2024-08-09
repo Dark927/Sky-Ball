@@ -1,6 +1,7 @@
 using UnityEngine;
+using UnityEngine.Events;
 
-public class EnemyDefaultHead : MonoBehaviour
+public class EnemyHead : MonoBehaviour
 {
     // -----------------------------------------------------------------------
     // Enums
@@ -34,7 +35,10 @@ public class EnemyDefaultHead : MonoBehaviour
     [Header("Main Settings")]
 
     [SerializeField] private TYPE _type;
+
+    [HideInInspector] public UnityEvent OnDeathEvent = new();
     protected EnemyBody _body;
+    
 
     #endregion
 
@@ -45,13 +49,14 @@ public class EnemyDefaultHead : MonoBehaviour
 
     #region Public Methods
 
-
-
     public void Deactivate()
     {
         // TODO : Add score for player 
 
         gameObject.SetActive(false);
+        _body.gameObject.SetActive(true);
+
+        OnDeathEvent?.Invoke();
     }
 
     public TYPE Type
@@ -61,7 +66,9 @@ public class EnemyDefaultHead : MonoBehaviour
             if (!IsCorrectType())
             {
                 _type = TYPE.LastIndex;
-                Debug.Log($"# Warning -> {gameObject.name} - Type == NumberOfEnemy. Return LAST enemy type.");
+                
+                string warningMsg = $"{gameObject.name} - {nameof(_type)} == {nameof(TYPE.NumberOfEnemy)}. Return {nameof(TYPE.LastIndex)} type.";
+                ErrorsManager.instance.SendWarningMsg(warningMsg);
             }
 
             return _type;
@@ -78,10 +85,16 @@ public class EnemyDefaultHead : MonoBehaviour
 
     #region Private Methods
 
+    private void OnEnable()
+    {
+        _body.transform.SetPositionAndRotation(transform.position, transform.rotation);
+    }
+
     private void Awake()
     {
-        _body = GetComponentInChildren<EnemyBody>();
+        _body = GetComponentInChildren<EnemyBody>(true);
     }
+
     private bool IsCorrectType() => (_type != TYPE.NumberOfEnemy);
 
     #endregion

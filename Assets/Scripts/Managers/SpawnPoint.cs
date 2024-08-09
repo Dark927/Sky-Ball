@@ -14,6 +14,35 @@ public class SpawnPoint : MonoBehaviour
 
 
     // -----------------------------------------------------------------------
+    // Public Methods
+    // -----------------------------------------------------------------------
+
+    #region Public Methods
+
+    public bool IsBlocked => _isBlocked;
+
+    public void Spawn(EnemyHead enemyToSpawn)
+    {
+        Vector3 spawnPos = new Vector3(transform.position.x, 0, transform.position.z);
+
+        enemyToSpawn.transform.position = spawnPos;
+        enemyToSpawn.gameObject.SetActive(true);
+    }
+
+    public void PrepareToSpawn()
+    {
+        _isBlocked = true;
+    }
+
+    public void ResetState()
+    {
+        _isBlocked = false;
+    }
+
+    #endregion 
+
+
+    // -----------------------------------------------------------------------
     // Private Methods
     // -----------------------------------------------------------------------
 
@@ -37,29 +66,9 @@ public class SpawnPoint : MonoBehaviour
 
     private bool IsEnemy(Collider collision)
     {
-        return (collision.gameObject.GetComponent<EnemyDefaultHead>() != null);
+        return (collision.GetComponent<EnemyHead>() != null);
     }
 
     #endregion
-
-
-    // -----------------------------------------------------------------------
-    // Public Methods
-    // -----------------------------------------------------------------------
-
-    #region Public Methods
-
-    public void Spawn(GameObject enemyToSpawn)
-    {
-        Vector3 offsetY = new Vector3(0, enemyToSpawn.transform.position.y, 0);
-        Instantiate(enemyToSpawn, transform.position + offsetY, Quaternion.identity);
-    }
-
-    public bool IsBlocked()
-    {
-        return _isBlocked;
-    }
-
-    #endregion 
 
 }

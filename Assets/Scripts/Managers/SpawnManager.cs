@@ -9,12 +9,13 @@ public class SpawnManager : MonoBehaviour
 
     #region Fields 
 
+    public static SpawnManager instance;
+
     [Header("Enemy Settings")]
     [Space]
 
-    [SerializeField] private List<GameObject> _enemyPrefabs;
+    [SerializeField] private EnemyPool _enemyPool;
     [SerializeField] private int _maxEnemiesCount = 500;
-    private int _activeEnemies = 0;
 
     [Space]
     [Header("Power Ups Settings")]
@@ -32,14 +33,13 @@ public class SpawnManager : MonoBehaviour
     [SerializeField] private float _safeDistance = 3f;
     [SerializeField] private float _spawnRadius = 8f;
 
-
-    private List<SpawnPoint> _actualSpawners = new();
+    private List<SpawnPoint> _allSpawnersList;
     private DifficultyManager _difficultyManager;
+    private Transform _playerTransform;
 
     // Error identifiers 
 
     private float _errorBoundY = -50f;
-    private bool _fatalError = false;
 
     #endregion
 
@@ -52,43 +52,67 @@ public class SpawnManager : MonoBehaviour
 
     private void Awake()
     {
+        if(instance == null)
+        {
+            instance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+
+        ConfigureReferences();
+    }
+
+    private void ConfigureReferences()
+    {
         _difficultyManager = FindObjectOfType<DifficultyManager>();
+        _allSpawnersList = new(GetComponentsInChildren<SpawnPoint>());
+        PlayerController player = FindObjectOfType<PlayerController>();
 
-        if(_difficultyManager == null)
+
+        if (player != null)
         {
-            _fatalError = true;
-            Debug.Log("# Fatal Error : SpawnManager.cs -> difficultyManager == null, can't spawn enemies.");
+            _playerTransform = player.transform;
+        }
+        else
+        {
+            string errorMsg = $"{player} == null, can not find Player object! - {gameObject.name}";
+            ErrorsManager.instance.SendErrorMsg(errorMsg, true);
+        }
+
+        if ((_difficultyManager == null) || (_enemyPool == null))
+        {
+            string nullReferenceObjectName = (_difficultyManager != null) ? nameof(_enemyPool) : nameof(_difficultyManager);
+
+            string errorMsg = $"{nullReferenceObjectName} == null, can not spawn enemies! - {gameObject.name}";
+            ErrorsManager.instance.SendErrorMsg(errorMsg, true);
         }
     }
 
-    // Update is called once per frame
-    private void Update()
+    private void Start()
     {
-        if (!_fatalError)
-        {
-            NextWave();
-        }
+        _enemyPool.AddEventListenerToAll(TryStartNextWave);
+        Invoke(nameof(TryStartNextWave), 1f);
     }
 
-    private void NextWave()
-    {
-        _activeEnemies = FindObjectsOfType<EnemyDefaultHead>().Length;
 
-        if (_activeEnemies == 0)
+    public void TryStartNextWave()
+    {
+        if ((_enemyPool.ActiveEnemiesCount == 0))
         {
             _difficultyManager.NextWave();
-
             SpawnNewWave(_difficultyManager.EnemySpawnCount);
         }
     }
 
     private void SpawnNewWave(int enemiesCount)
     {
-        // ------------------------------------------
-        // Destroy previous Power Ups and spawn New ones
-        // ------------------------------------------
+        // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        // Destroy previous Power Ups and spawn new ones
+        // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-        // Check if powerUpsCount is out of limit 
+        // Check if power ups count is out of limit 
 
         if (_powerUpsToSpawn > _maxPowerUpsCount)
         {
@@ -105,34 +129,43 @@ public class SpawnManager : MonoBehaviour
         }
 
 
-        // ------------------------------------------
+        // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
         // Enemy spawn
-        // ------------------------------------------
+        // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-        // Check if enemiesCount is out of limit 
+        // Reset all spawners
+
+        foreach(SpawnPoint spawnPoint in _allSpawnersList)
+        {
+            spawnPoint.ResetState();
+        }
+
+        // Check if enemies count is out of limit 
 
         if (enemiesCount > _maxEnemiesCount)
         {
             enemiesCount = _maxEnemiesCount;
         }
 
-        List<GameObject> availableEnemies = _difficultyManager.AvailableEnemyList(_enemyPrefabs);
+        List<EnemyHead.TYPE> availableEnemyTypes = _difficultyManager.AvailableEnemyTypes(_enemyPool);
 
-        // Spawn enemies in cycle 
-        for (int i = 0; i < enemiesCount; ++i)
+        // Spawn enemies
+
+        if (availableEnemyTypes.Count != 0)
         {
-            if (availableEnemies.Count == 0)
+            for (int currentEnemy = 0; currentEnemy < enemiesCount; ++currentEnemy)
             {
-                Debug.Log("# Warning :: Skip wave, list of available enemies is empty! - " + gameObject.name);
-                break;
+                int enemyTypeIndex = Random.Range(0, availableEnemyTypes.Count);
+                EnemyHead enemyToSpawn = _enemyPool.RequestInactiveEnemy(availableEnemyTypes[enemyTypeIndex]);
+                Debug.Log(enemyToSpawn);
+                SpawnEnemy(enemyToSpawn);
             }
-
-            int enemyIndex = Random.Range(0, availableEnemies.Count);
-
-            SpawnEnemy(availableEnemies[enemyIndex]);
         }
-
-        _actualSpawners.Clear();
+        else
+        {
+            string warningMsg = $"Skip wave, list of available enemies is empty! - {gameObject.name}";
+            ErrorsManager.instance.SendWarningMsg(warningMsg);
+        }
     }
 
     private void DestroyActivePowerUps()
@@ -156,70 +189,63 @@ public class SpawnManager : MonoBehaviour
         }
     }
 
-    private void SpawnEnemy(GameObject enemyToSpawn)
+    private void SpawnEnemy(EnemyHead enemyToSpawn)
     {
-        SpawnPoint[] spawners = GetComponentsInChildren<SpawnPoint>();
-        SpawnPoint actualSpawner = FindFarthestSpawner(spawners);
+        SpawnPoint availableSpawner = FindFarthestSpawner();
 
-        // Use spawner if it is not blocked 
-        if (actualSpawner != null)
+        if (availableSpawner != null)
         {
-            actualSpawner.Spawn(enemyToSpawn);
+            availableSpawner.Spawn(enemyToSpawn);
         }
-
-        // Generate random accessible position if all spawners are blocked 
         else
         {
-            Vector3 actualSpawnPosition = CalculateRandomSpawnPosition<EnemyDefaultHead>(enemyToSpawn);
+            // Generate random accessible position if all spawners are blocked 
 
-            // Spawn object only at correct positions
+            Vector3 targetSpawnPosition = CalculateRandomSpawnPosition<EnemyHead>(enemyToSpawn.gameObject);
 
-            if (actualSpawnPosition.y > _errorBoundY)
+            if (targetSpawnPosition.y > _errorBoundY)
             {
-                Instantiate(enemyToSpawn, actualSpawnPosition, Quaternion.identity);
+                enemyToSpawn.transform.position = targetSpawnPosition;
+                enemyToSpawn.gameObject.SetActive(true);
             }
         }
-
     }
 
 
-    private Vector3 CalculateRandomSpawnPosition<T>(GameObject objectToSpawn) where T : MonoBehaviour
+    private Vector3 CalculateRandomSpawnPosition<Entity>(GameObject objectToSpawn) where Entity : MonoBehaviour
     {
-        // ------------------------------------------
+        // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
         // Collect all active entities positions 
-        // ------------------------------------------
+        // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-        Vector3 playerPosition = FindObjectOfType<PlayerController>().transform.position;
+        List<Vector3> entitiesPositions = new() { _playerTransform.position };
 
-        List<Vector3> entitiesPositions = new();
-        entitiesPositions.Add(playerPosition);
+        Entity[] activeEntities = FindObjectsOfType<Entity>();
 
-        T[] activeEntities = FindObjectsOfType<T>();
-
-        foreach (T entity in activeEntities)
+        foreach (Entity entity in activeEntities)
         {
             entitiesPositions.Add(entity.transform.position);
         }
 
 
-        // ------------------------------------------
-        // Fields for generating spawn point
-        // ------------------------------------------
+        // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        // Fields for generating random spawn point
+        //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
         Vector3 actualSpawnPosition;
         bool isCorrectSpawnPoint;
 
-        int maxAttempts = 1000;
+        int maxAttempts = 100;
 
 
-        // ------------------------------------------
+        // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
         // Generating position cycle 
-        // ------------------------------------------
+        // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
         do
         {
             Vector2 positionInCircle = Random.insideUnitCircle * _spawnRadius;
-            actualSpawnPosition = new Vector3(positionInCircle.x, objectToSpawn.transform.position.y, positionInCircle.y);
+            actualSpawnPosition = new Vector3(positionInCircle.x, 0, positionInCircle.y);
 
             isCorrectSpawnPoint = true;
             maxAttempts--;
@@ -235,43 +261,44 @@ public class SpawnManager : MonoBehaviour
                     break;
                 }
             }
+
         } while (!isCorrectSpawnPoint && (maxAttempts > 0));
 
         if (maxAttempts == 0)
         {
-            actualSpawnPosition = new Vector3(0, -100f, 0);
+            actualSpawnPosition = new Vector3(0, _errorBoundY, 0);
         }
 
         return actualSpawnPosition;
     }
 
 
-    private SpawnPoint FindFarthestSpawner(SpawnPoint[] spawners)
+    private SpawnPoint FindFarthestSpawner()
     {
-        SpawnPoint actualSpawner = null;
-        float maxDistance = 0;
+        SpawnPoint farthestSpawner = null;
+        float sqrMaxDistance = 0;
 
-        foreach (SpawnPoint spawner in spawners)
+        foreach (SpawnPoint spawner in _allSpawnersList)
         {
-            if (spawner.IsBlocked() || _actualSpawners.Contains(spawner))
+            if (spawner.IsBlocked)
             {
                 continue;
             }
 
-            Vector3 spawnerPosition = spawner.gameObject.transform.position;
-            Vector3 playerPosition = FindObjectOfType<PlayerController>().transform.position;
+            Vector3 spawnerPosition = spawner.transform.position;
+            Vector3 playerPosition = _playerTransform.position;
 
-            float distanceToPlayer = (playerPosition - spawnerPosition).magnitude;
+            float sqrDistanceToPlayer = (playerPosition - spawnerPosition).sqrMagnitude;
 
-            if (distanceToPlayer > maxDistance)
+            if (sqrDistanceToPlayer > sqrMaxDistance)
             {
-                maxDistance = distanceToPlayer;
-                actualSpawner = spawner;
+                sqrMaxDistance = sqrDistanceToPlayer;
+                farthestSpawner = spawner;
             }
         }
 
-        _actualSpawners.Add(actualSpawner);
-        return actualSpawner;
+        farthestSpawner.PrepareToSpawn();
+        return farthestSpawner;
     }
 
     #endregion

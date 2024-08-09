@@ -32,83 +32,6 @@ public class DifficultyManager : MonoBehaviour
 
     #endregion
 
-    // -----------------------------------------------------------------------
-    // Private Methods
-    // -----------------------------------------------------------------------
-
-    #region Private Methods
-
-    private WaveType GetWaveType()
-    {
-        for (int i = 0; i < _waveBounds.Count; ++i)
-        {
-            if(_waveCount < _waveBounds[i])
-            {
-                return _waveTypes[i];
-            }
-        }
-
-        return WaveType.Hard;
-    }
-
-    private List<GameObject> GenerateAvailableEnemyList(List<GameObject> allEnemyPrefabs, List<EnemyDefaultHead.TYPE> enemyTypesToSpawn)
-    {
-        List<GameObject> availableEnemyList = new();
-
-        // Check every enemy prefab from available prefabs list
-
-        foreach (GameObject enemyPrefab in allEnemyPrefabs)
-        {
-            if (CompareEnemyByType(enemyPrefab, enemyTypesToSpawn))
-            {
-                availableEnemyList.Add(enemyPrefab);
-            }
-        }
-
-        return availableEnemyList;
-    }
-
-    private bool CompareEnemyByType(GameObject enemyPrefab, List<EnemyDefaultHead.TYPE> enemyTypes)
-    {
-        // Get enemy type 
-
-        EnemyDefaultHead.TYPE type = CheckEnemyType(enemyPrefab);
-
-        // Compare enemy type with available enemy types 
-
-        foreach (EnemyDefaultHead.TYPE enemyType in enemyTypes)
-        {
-            if (type == enemyType)
-            {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    private EnemyDefaultHead.TYPE CheckEnemyType(GameObject enemyPrefab)
-    {
-        // Try get enemy component from prefab 
-
-        EnemyDefaultHead enemy = enemyPrefab.GetComponent<EnemyDefaultHead>();
-
-        if (enemy == null)
-        {
-            enemy = enemyPrefab.GetComponentInChildren<EnemyDefaultHead>();
-        }
-
-        // Return enemy type 
-
-        if (enemy != null)
-        {
-            return enemy.Type;
-        }
-
-        return EnemyDefaultHead.TYPE.Default;
-    }
-
-    #endregion
 
     // -----------------------------------------------------------------------
     // Public Methods
@@ -126,13 +49,9 @@ public class DifficultyManager : MonoBehaviour
         }
     }
 
-    public int EnemySpawnCount
-    {
-        get { return _enemiesToSpawn; }
-        set { return; }
-    }
+    public int EnemySpawnCount => _enemiesToSpawn;
 
-    public List<GameObject> AvailableEnemyList(List<GameObject> allEnemyPrefabs)
+    public List<EnemyHead.TYPE> AvailableEnemyTypes(EnemyPool pool)
     {
         WaveType type = GetWaveType();
 
@@ -141,33 +60,87 @@ public class DifficultyManager : MonoBehaviour
             default:
             case WaveType.Start:
                 {
-                    List<EnemyDefaultHead.TYPE> enemyTypesToSpawn = new List<EnemyDefaultHead.TYPE> { EnemyDefaultHead.TYPE.Default };
-                    return GenerateAvailableEnemyList(allEnemyPrefabs, enemyTypesToSpawn);
+                    List<EnemyHead.TYPE> enemyTypesToSpawn = new() { EnemyHead.TYPE.Default };
+                    return GetWaveEnemyTypes(pool, enemyTypesToSpawn);
                 }
 
             case WaveType.Easy:
                 {
-                    List<EnemyDefaultHead.TYPE> enemyTypesToSpawn = new List<EnemyDefaultHead.TYPE> { EnemyDefaultHead.TYPE.Default, EnemyDefaultHead.TYPE.Fast, EnemyDefaultHead.TYPE.Range };
-                    return GenerateAvailableEnemyList(allEnemyPrefabs, enemyTypesToSpawn);
+                    List<EnemyHead.TYPE> enemyTypesToSpawn = new() { EnemyHead.TYPE.Default, EnemyHead.TYPE.Fast, EnemyHead.TYPE.Range };
+                    return GetWaveEnemyTypes(pool, enemyTypesToSpawn);
                 }
+
             case WaveType.Medium:
                 {
-                    List<EnemyDefaultHead.TYPE> enemyTypesToSpawn = new List<EnemyDefaultHead.TYPE> { EnemyDefaultHead.TYPE.Default, EnemyDefaultHead.TYPE.Fast, EnemyDefaultHead.TYPE.Heavy };
-                    return GenerateAvailableEnemyList(allEnemyPrefabs, enemyTypesToSpawn);
+                    List<EnemyHead.TYPE> enemyTypesToSpawn = new() { EnemyHead.TYPE.Default, EnemyHead.TYPE.Fast, EnemyHead.TYPE.Heavy };
+                    return GetWaveEnemyTypes(pool, enemyTypesToSpawn);
                 }
+
             case WaveType.Hard:
                 {
-                    List<EnemyDefaultHead.TYPE> enemyTypesToSpawn = new List<EnemyDefaultHead.TYPE> { EnemyDefaultHead.TYPE.Fast, EnemyDefaultHead.TYPE.Heavy, EnemyDefaultHead.TYPE.Group, EnemyDefaultHead.TYPE.Range };
-                    return GenerateAvailableEnemyList(allEnemyPrefabs, enemyTypesToSpawn);
+                    List<EnemyHead.TYPE> enemyTypesToSpawn = new() { EnemyHead.TYPE.Fast, EnemyHead.TYPE.Heavy, EnemyHead.TYPE.Group, EnemyHead.TYPE.Range };
+                    return GetWaveEnemyTypes(pool, enemyTypesToSpawn);
                 }
+
             case WaveType.Boss:
                 {
-                    List<EnemyDefaultHead.TYPE> enemyTypesToSpawn = new List<EnemyDefaultHead.TYPE> { EnemyDefaultHead.TYPE.Boss };
-                    return GenerateAvailableEnemyList(allEnemyPrefabs, enemyTypesToSpawn);
+                    List<EnemyHead.TYPE> enemyTypesToSpawn = new() { EnemyHead.TYPE.Boss };
+                    return GetWaveEnemyTypes(pool, enemyTypesToSpawn);
                 }
         }
     }
 
+    #endregion
+
+
+    // -----------------------------------------------------------------------
+    // Private Methods
+    // -----------------------------------------------------------------------
+
+    #region Private Methods
+
+    private WaveType GetWaveType()
+    {
+        for (int i = 0; i < _waveBounds.Count; ++i)
+        {
+            if (_waveCount < _waveBounds[i])
+            {
+                return _waveTypes[i];
+            }
+        }
+
+        return WaveType.Hard;
+    }
+
+    private List<EnemyHead.TYPE> GetWaveEnemyTypes(EnemyPool pool, List<EnemyHead.TYPE> enemyTypesToSpawn)
+    {
+        List<EnemyHead.TYPE> waveEnemyTypes = new();
+        List<EnemyHead.TYPE> poolAvailableTypes = pool.RequestAvailableEnemyTypes();
+
+        foreach (EnemyHead.TYPE currentType in poolAvailableTypes)
+        {
+            if (IsEnemyTypeInList(enemyTypesToSpawn, currentType))
+            {
+                waveEnemyTypes.Add(currentType);
+            }
+        }
+
+        return waveEnemyTypes;
+    }
+
+    private bool IsEnemyTypeInList(List<EnemyHead.TYPE> sourceTypesList, EnemyHead.TYPE targetType)
+    {
+        foreach (EnemyHead.TYPE sourceType in sourceTypesList)
+        {
+            if (targetType == sourceType)
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
 
     #endregion
+
 }

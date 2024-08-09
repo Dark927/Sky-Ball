@@ -2,11 +2,11 @@ using UnityEngine;
 
 public class EnemyBody : MonoBehaviour
 {
-    private EnemyDefaultHead _head;
+    private EnemyHead _head;
 
     private void Awake()
     {
-        _head = GetComponentInParent<EnemyDefaultHead>();
+        _head = GetComponentInParent<EnemyHead>();
     }
 
     public void Die()

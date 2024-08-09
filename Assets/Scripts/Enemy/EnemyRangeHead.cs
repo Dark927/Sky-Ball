@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class EnemyRangeHead : EnemyDefaultHead
+public class EnemyRangeHead : EnemyHead
 {
     // -----------------------------------------------------------------------
     // Fields 

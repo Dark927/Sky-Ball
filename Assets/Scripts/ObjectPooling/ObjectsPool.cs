@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -13,47 +12,6 @@ public class ObjectsPool : MonoBehaviour
     [SerializeField] private List<PoolObjectData> _objectsDataList;
 
     private List<GameObject> _pool;
-
-    #endregion
-
-
-    // -----------------------------------------------------------------------
-    // Private Methods
-    // -----------------------------------------------------------------------
-
-    #region Private Methods
-
-
-    private void Awake()
-    {
-        _pool = new();
-        InitPool();
-    }
-
-    private void InitPool()
-    {
-        foreach (PoolObjectData objectData in _objectsDataList)
-        {
-            GameObject objectsContainer = new(objectData.Title);
-            objectsContainer.transform.parent = transform;
-
-            for (int currentIndex = 0; currentIndex < objectData.CountToCreate; ++currentIndex)
-            {
-                AddNewElement(objectData.Prefab, objectsContainer.transform);
-            }
-        }
-    }
-
-    private GameObject AddNewElement(GameObject newElement, Transform parent = null)
-    {
-        if (parent == null) parent = transform;
-
-        GameObject newObject = Instantiate(newElement, transform.position, Quaternion.identity, parent);
-        newObject.SetActive(false);
-        _pool.Add(newObject);
-
-        return newObject;
-    }
 
     #endregion
 
@@ -89,4 +47,48 @@ public class ObjectsPool : MonoBehaviour
     }
 
     #endregion
+
+
+    // -----------------------------------------------------------------------
+    // Private Methods
+    // -----------------------------------------------------------------------
+
+    #region Private Methods
+
+    private void Awake()
+    {
+        _pool = new();
+        InitPool();
+    }
+
+    private void InitPool()
+    {
+        foreach (PoolObjectData objectData in _objectsDataList)
+        {
+            GameObject objectsContainer = new(objectData.Title);
+            objectsContainer.transform.parent = transform;
+
+            for (int currentIndex = 0; currentIndex < objectData.CountToCreate; ++currentIndex)
+            {
+                AddNewElement(objectData.Prefab, objectsContainer.transform);
+            }
+        }
+    }
+
+    private GameObject AddNewElement(GameObject newElement, Transform parent = null)
+    {
+        if (parent == null)
+        {
+            parent = transform;
+        }
+
+        GameObject newObject = Instantiate(newElement, transform.position, Quaternion.identity, parent);
+        newObject.SetActive(false);
+        _pool.Add(newObject);
+
+        return newObject;
+    }
+
+    #endregion
+
 }

@@ -1,0 +1,17 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6c06ab78ae287ab48a79ebaf5b32e170, type: 3}
+  m_Name: Enemy_fast
+  m_EditorClassIdentifier: 
+  _title: e_Fast
+  _prefab: {fileID: 2692876094600704085, guid: aceec92912eb9fb4abd3e8c8b21ca0e6, type: 3}
+  _countToCreate: 5

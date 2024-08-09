@@ -169,7 +169,7 @@ GameObject:
   - component: {fileID: 9022199323014061538}
   - component: {fileID: 874927303755267360}
   m_Layer: 0
-  m_Name: Enemy_Default
+  m_Name: Enemy_default
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -204,3 +204,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _type: 0
+  OnDeathEvent:
+    m_PersistentCalls:
+      m_Calls: []
