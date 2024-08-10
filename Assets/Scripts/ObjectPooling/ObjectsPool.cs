@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -9,9 +10,10 @@ public class ObjectsPool : MonoBehaviour
 
     #region Fields
 
-    [SerializeField] private List<PoolObjectData> _objectsDataList;
+    [SerializeField] private PoolObjectData _objectData;
 
     private List<GameObject> _pool;
+    private GameObject _container;
 
     #endregion
 
@@ -21,8 +23,14 @@ public class ObjectsPool : MonoBehaviour
     // -----------------------------------------------------------------------
 
     #region Public Methods
+
     public GameObject RequestInactiveObject(bool allowExpansion = false)
     {
+        if(_pool == null)
+        {
+            throw new NullReferenceException($"Pool is not initialized - {gameObject.name}.");
+        }
+
         foreach (GameObject element in _pool)
         {
             if (!element.activeInHierarchy)
@@ -31,19 +39,24 @@ public class ObjectsPool : MonoBehaviour
             }
         }
 
-
         // Create new element if all elements are active.
 
         if (allowExpansion)
         {
-            if (_objectsDataList.Count != 0)
             {
-                return AddNewElement(_objectsDataList[0].Prefab, transform.GetChild(0).transform);
+                return AddNewElement(_objectData.Prefab, _container.transform);
             }
         }
 
-
         return null;
+    }
+
+    public void DeactivateAll()
+    {
+        foreach (GameObject element in _pool)
+        {
+            element.SetActive(false);
+        }
     }
 
     #endregion
@@ -57,21 +70,26 @@ public class ObjectsPool : MonoBehaviour
 
     private void Awake()
     {
-        _pool = new();
-        InitPool();
+        if (_objectData != null)
+        {
+            _pool = new();
+            InitPool();
+        }
+        else
+        {
+            string errorMsg = $"{nameof(_objectData)} is null, can not init pool - {gameObject.name}.";
+            ErrorsManager.Instance.SendErrorMsg(errorMsg);
+        }
     }
 
     private void InitPool()
     {
-        foreach (PoolObjectData objectData in _objectsDataList)
-        {
-            GameObject objectsContainer = new(objectData.Title);
-            objectsContainer.transform.parent = transform;
+        _container = new(_objectData.Title);
+        _container.transform.parent = transform;
 
-            for (int currentIndex = 0; currentIndex < objectData.CountToCreate; ++currentIndex)
-            {
-                AddNewElement(objectData.Prefab, objectsContainer.transform);
-            }
+        for (int currentIndex = 0; currentIndex < _objectData.CountToCreate; ++currentIndex)
+        {
+            AddNewElement(_objectData.Prefab, _container.transform);
         }
     }
 

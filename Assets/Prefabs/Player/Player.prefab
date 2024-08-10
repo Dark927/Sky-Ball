@@ -45,8 +45,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0a90413f4ebe89047a52eefa9a63134f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _objectsDataList:
-  - {fileID: 11400000, guid: f5933814df1889f4db70a919e887734f, type: 2}
+  _objectData: {fileID: 11400000, guid: f5933814df1889f4db70a919e887734f, type: 2}
 --- !u!114 &8165869205465420783
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -253,6 +252,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Rocket_launcher
       objectReference: {fileID: 0}
+    - target: {fileID: 8911311916671562031, guid: 30fe1c2a39d7e004faef7cff11378296, type: 3}
+      propertyPath: _objectData
+      value: 
+      objectReference: {fileID: 11400000, guid: 5f9a2edfa52933e4586334aeb57185c4, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 30fe1c2a39d7e004faef7cff11378296, type: 3}
 --- !u!114 &5665527030688336896 stripped
@@ -326,6 +329,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: LightningsOrigin
       objectReference: {fileID: 0}
+    - target: {fileID: 7750007147281292351, guid: 4bb82fa2ce0eec9479abdb3bec662655, type: 3}
+      propertyPath: _objectData
+      value: 
+      objectReference: {fileID: 11400000, guid: 7b86585bbf3e44a4ea9e2d1762a711c7, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4bb82fa2ce0eec9479abdb3bec662655, type: 3}
 --- !u!114 &4034462979425398596 stripped

@@ -132,6 +132,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _type: 4
+  OnDeathEvent:
+    m_PersistentCalls:
+      m_Calls: []
   _rocketLauncher: {fileID: 5803652790285985553}
 --- !u!1 &2131986307702718925
 GameObject:
@@ -227,8 +230,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0a90413f4ebe89047a52eefa9a63134f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _objectsDataList:
-  - {fileID: 11400000, guid: 5b039accc7d8d794bbcbe4ab60f55c0d, type: 2}
+  _objectData: {fileID: 11400000, guid: 5b039accc7d8d794bbcbe4ab60f55c0d, type: 2}
 --- !u!114 &5803652790285985553
 MonoBehaviour:
   m_ObjectHideFlags: 0

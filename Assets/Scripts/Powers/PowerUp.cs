@@ -45,43 +45,31 @@ public class PowerUp : MonoBehaviour
 
 
     // -----------------------------------------------------------------------
-    // Public Methods
+    // Properties
     // -----------------------------------------------------------------------
 
     #region Public Methods
 
-    public TYPE GetPowerType()
+    public TYPE Type
     {
-        if (_powerType != TYPE.NumberOfPowers)
+        get
         {
-            return _powerType;
+            if (_powerType != TYPE.NumberOfPowers)
+            {
+                return _powerType;
+            }
+            else
+            {
+                Debug.Log($"# Warning -> {gameObject.name} - PowerUpType == Power_numberOfPowers. Return LAST power up.");
+                return TYPE.LastIndex;
+            }
         }
-        else
-        {
-            Debug.Log($"# Warning -> {gameObject.name} - PowerUpType == Power_numberOfPowers. Return LAST power up.");
-            return TYPE.LastIndex;
-        }
     }
 
-    public float GetPowerActiveTime()
-    {
-        return _powerUpActiveTime;
-    }
-
-    public float GetPowerReloadTime()
-    {
-        return _powerUpReloadTime;
-    }
-
-    public float GetPowerUpStrength()
-    {
-        return _powerUpStrength;
-    }
-
-    public Color GetIndicatorColor()
-    {
-        return _indicatorColor;
-    }    
+    public float PowerActiveTime => _powerUpActiveTime;
+    public float PowerReloadTime => _powerUpReloadTime;
+    public float PowerUpStrength => _powerUpStrength;
+    public Color IndicatorColor => _indicatorColor;
 
     #endregion
 }

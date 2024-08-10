@@ -103,7 +103,7 @@ public class PlayerPowerUp : MonoBehaviour
             // Save new power up Fields 
 
             ConfigurePowerFields(_power);
-            Destroy(_power.gameObject);
+            _power.gameObject.SetActive(false);
 
             // Power up start Fields
 
@@ -166,12 +166,12 @@ public class PlayerPowerUp : MonoBehaviour
 
     private void ConfigurePowerFields(PowerUp power)
     {
-        _indicatorMaterial.color = power.GetIndicatorColor();
+        _indicatorMaterial.color = power.IndicatorColor;
 
-        _powerStrength = power.GetPowerUpStrength();
-        _powerType = power.GetPowerType();
-        _powerActiveTime = power.GetPowerActiveTime();
-        _powerReloadTime = power.GetPowerReloadTime();
+        _powerStrength = power.PowerUpStrength;
+        _powerType = power.Type;
+        _powerActiveTime = power.PowerActiveTime;
+        _powerReloadTime = power.PowerReloadTime;
     }
 
 

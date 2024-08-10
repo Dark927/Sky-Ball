@@ -49,11 +49,11 @@ public class LightningsSource : MonoBehaviour
         int lightningsCount = UnityEngine.Random.Range(minStrikesCount, maxStrikesCount);
         Target[] allTargets = FindObjectsOfType<Target>();
 
-        for (int i = 0; (i < lightningsCount) && (i < allTargets.Length); ++i)
+        for (int currentIndex = 0; (currentIndex < lightningsCount) && (currentIndex < allTargets.Length); ++currentIndex)
         {
             GameObject lightningStrike = _lightningsPool.RequestInactiveObject(true);
 
-            lightningStrike.transform.position = allTargets[i].transform.position;
+            lightningStrike.transform.position = allTargets[currentIndex].transform.position;
             lightningStrike.SetActive(true);
 
             Explosion strikeExplosion = lightningStrike.GetComponent<Explosion>();

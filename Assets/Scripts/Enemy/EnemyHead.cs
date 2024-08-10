@@ -68,7 +68,7 @@ public class EnemyHead : MonoBehaviour
                 _type = TYPE.LastIndex;
                 
                 string warningMsg = $"{gameObject.name} - {nameof(_type)} == {nameof(TYPE.NumberOfEnemy)}. Return {nameof(TYPE.LastIndex)} type.";
-                ErrorsManager.instance.SendWarningMsg(warningMsg);
+                ErrorsManager.Instance.SendWarningMsg(warningMsg);
             }
 
             return _type;

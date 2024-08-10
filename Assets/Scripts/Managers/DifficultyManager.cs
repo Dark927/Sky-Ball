@@ -23,12 +23,27 @@ public class DifficultyManager : MonoBehaviour
 
     #region Fields
 
+    public static DifficultyManager Instance;
+
     private int _enemiesToSpawn = 2;
+    private int _powersToSpawn = 1;
     private int _waveCount = 0;
     private int _increaseEnemyCountInterval = 3;
 
     private List<WaveType> _waveTypes = new List<WaveType> { WaveType.Start, WaveType.Easy, WaveType.Medium, WaveType.Hard, WaveType.Boss };
     private List<int> _waveBounds = new List<int> { 2, 3, 6, 9, 11 };
+
+    #endregion
+
+
+    // -----------------------------------------------------------------------
+    // Properties
+    // -----------------------------------------------------------------------
+
+    #region Properties
+
+    public int EnemySpawnCount => _enemiesToSpawn;
+    public int PowerSpawnCount => _powersToSpawn;
 
     #endregion
 
@@ -46,10 +61,9 @@ public class DifficultyManager : MonoBehaviour
         if ((_waveCount % _increaseEnemyCountInterval) == 0)
         {
             _enemiesToSpawn++;
+            _powersToSpawn++;
         }
     }
-
-    public int EnemySpawnCount => _enemiesToSpawn;
 
     public List<EnemyHead.TYPE> AvailableEnemyTypes(EnemyPool pool)
     {
@@ -98,6 +112,23 @@ public class DifficultyManager : MonoBehaviour
     // -----------------------------------------------------------------------
 
     #region Private Methods
+
+    private void Awake()
+    {
+        SetInstance();
+    }
+
+    private void SetInstance()
+    {
+        if (Instance == null)
+        {
+            Instance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
 
     private WaveType GetWaveType()
     {

@@ -1,4 +1,6 @@
 using UnityEngine;
+using System.Collections.Generic;
+
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -6,7 +8,7 @@ using UnityEditor;
 
 public class ErrorsManager : MonoBehaviour
 {
-    public static ErrorsManager instance;
+    public static ErrorsManager Instance;
 
     // -----------------------------------------------------------------------
     // Public Methods
@@ -48,14 +50,63 @@ public class ErrorsManager : MonoBehaviour
 
     private void Awake()
     {
-        if (instance == null)
+        SetInstance();
+    }
+
+    private void SetInstance()
+    {
+        if (Instance == null)
         {
-            instance = this;
+            Instance = this;
             DontDestroyOnLoad(gameObject);
         }
         else
         {
             Destroy(gameObject);
+        }
+    }
+
+    private void Start()
+    {
+        CheckManagersState();
+    }
+
+    private void CheckManagersState()
+    {
+        bool isFatal = false;
+
+        List<string> managersNames = new List<string>()
+        {
+          nameof(DifficultyManager),
+          nameof(EnemySpawner),
+          nameof(PositionManager),
+          nameof(PowersSpawner),
+          nameof(WavesManager),
+        };
+
+        List<bool> managersCreated = new List<bool>()
+        {
+          DifficultyManager.Instance != null,
+          EnemySpawner.Instance!= null,
+          PositionManager.Instance!= null,
+          PowersSpawner.Instance != null,
+          WavesManager.Instance != null,
+        };
+
+
+        for (int currentManager = 0; currentManager < managersCreated.Count; currentManager++)
+        {
+            if (!managersCreated[currentManager])
+            {
+                SendErrorMsg($"{managersNames[currentManager]} is null !");
+                isFatal = true;
+            }
+        }
+
+        if (isFatal)
+        {
+
+            SendErrorMsg("Some of Managers is null, can not start the game.", true);
         }
     }
 
