@@ -50,7 +50,7 @@ public class RocketLauncherBody : MonoBehaviour
         {
             case RocketLogic.OWNER.Player:
                 {
-                    _lookTarget = FindObjectOfType<PlayerController>().gameObject;
+                    _lookTarget = FindObjectOfType<PlayerMovement>().gameObject;
                 }
                 break;
 

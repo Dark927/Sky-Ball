@@ -105,7 +105,7 @@ GameObject:
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
-  m_Icon: {fileID: 0}
+  m_Icon: {fileID: -5397416234189338067, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
@@ -374,6 +374,18 @@ PrefabInstance:
       propertyPath: _powerUpIndicator
       value: 
       objectReference: {fileID: 2263483555246159114}
+    - target: {fileID: 4746699175001688161, guid: 118ef74ccc33a82408cc1b1e1e940b1b, type: 3}
+      propertyPath: m_Material
+      value: 
+      objectReference: {fileID: 13400000, guid: 7cc95992f82d0044081b6fa3d39681b3, type: 2}
+    - target: {fileID: 4746699175001688162, guid: 118ef74ccc33a82408cc1b1e1e940b1b, type: 3}
+      propertyPath: m_Drag
+      value: 0.05
+      objectReference: {fileID: 0}
+    - target: {fileID: 4746699175001688162, guid: 118ef74ccc33a82408cc1b1e1e940b1b, type: 3}
+      propertyPath: m_Mass
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 4746699175001688163, guid: 118ef74ccc33a82408cc1b1e1e940b1b, type: 3}
       propertyPath: m_Name
       value: Player_sphere

@@ -19,9 +19,6 @@ public class EnemyMovement : MonoBehaviour
     [SerializeField] private float _basicSpeed = 3f;
 
     [Space]
-    [Header("Destroy bounds Settings")]
-
-    [SerializeField] private float _deathBoundY = -10f;
 
     #endregion
 
@@ -32,6 +29,7 @@ public class EnemyMovement : MonoBehaviour
     private Transform _playerTransform;
     private Vector3 _moveDirection = Vector3.zero;
 
+    public float BasicSpeed => _basicSpeed;
 
     #endregion
 
@@ -50,10 +48,17 @@ public class EnemyMovement : MonoBehaviour
 
     private void Start()
     {
-        PlayerController player = FindObjectOfType<PlayerController>();
+        PlayerMovement player = FindObjectOfType<PlayerMovement>();
 
-        if (player != null) _playerTransform = player.transform;
-        else Debug.Log($"# Error : Can not find the player in the scene. - {gameObject.name}, player is null.");
+        if (player != null)
+        {
+            _playerTransform = player.transform;
+        }
+        else
+        {
+            string errorMsg = $"Can not find the player in the scene. - {gameObject.name}, player is null.";
+            ErrorsManager.Instance.SendErrorMsg(errorMsg);
+        }
     }
 
     private void Update()
@@ -72,7 +77,7 @@ public class EnemyMovement : MonoBehaviour
         Move();
     }
 
-    private bool IsOutOfBounds() => (transform.position.y < _deathBoundY);
+    private bool IsOutOfBounds() => (transform.position.y < PositionManager.Instance.DeathBoundY);
 
     private void CalculateMoveDirection()
     {
@@ -81,7 +86,7 @@ public class EnemyMovement : MonoBehaviour
 
     private void Move()
     {
-        _rb.AddForce(_moveDirection * _basicSpeed);
+        _rb.AddForce(_moveDirection * _basicSpeed, ForceMode.Acceleration);
     }
 
     #endregion

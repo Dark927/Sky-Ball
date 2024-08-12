@@ -8,6 +8,7 @@ public class PositionManager : MonoBehaviour
     [Space]
 
     public static PositionManager Instance;
+    [SerializeField] private float _fallBoundY = -5f;
 
 
     [Space]
@@ -22,7 +23,15 @@ public class PositionManager : MonoBehaviour
     private Transform _playerTransform;
 
 
+    public float DeathBoundY => _fallBoundY;
     public float ErrorBoundY => _errorBoundY;
+
+
+    // -----------------------------------------------------------------------
+    // Public Methods
+    // -----------------------------------------------------------------------
+
+    #region Public Methods
 
     public Vector3 RandomSpawnPosition<Entity>() where Entity : MonoBehaviour
     {
@@ -74,8 +83,6 @@ public class PositionManager : MonoBehaviour
         return actualSpawnPosition;
     }
 
-
-
     public SpawnPoint FindFarthestSpawner(List<SpawnPoint> spawnersList)
     {
         SpawnPoint farthestSpawner = null;
@@ -103,12 +110,20 @@ public class PositionManager : MonoBehaviour
         return farthestSpawner;
     }
 
+    #endregion
+
+
+    // -----------------------------------------------------------------------
+    // Private Methods
+    // -----------------------------------------------------------------------
+
+    #region Private Methods
 
     private void Awake()
     {
         SetInstance();
 
-        PlayerController player = FindObjectOfType<PlayerController>();
+        PlayerMovement player = FindObjectOfType<PlayerMovement>();
 
 
         if (player != null)
@@ -147,4 +162,6 @@ public class PositionManager : MonoBehaviour
 
         return entitiesPositions;
     }
+
+    #endregion
 }

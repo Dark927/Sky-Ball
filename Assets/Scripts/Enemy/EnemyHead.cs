@@ -38,7 +38,7 @@ public class EnemyHead : MonoBehaviour
 
     [HideInInspector] public UnityEvent OnDeathEvent = new();
     protected EnemyBody _body;
-    
+    protected EnemyPowerUp _powerUps;
 
     #endregion
 
@@ -49,14 +49,20 @@ public class EnemyHead : MonoBehaviour
 
     #region Public Methods
 
-    public void Deactivate()
+    public virtual void TryDeactivate()
     {
-        // TODO : Add score for player 
+        if (!_body.gameObject.activeInHierarchy)
+        {
+            Deactivate();
+        }
+    }
 
-        gameObject.SetActive(false);
-        _body.gameObject.SetActive(true);
-
-        OnDeathEvent?.Invoke();
+    public void TryActivatePowers()
+    {
+        if (_powerUps != null)
+        {
+            _powerUps.TryActivateRocketLauncher();
+        }
     }
 
     public TYPE Type
@@ -66,7 +72,7 @@ public class EnemyHead : MonoBehaviour
             if (!IsCorrectType())
             {
                 _type = TYPE.LastIndex;
-                
+
                 string warningMsg = $"{gameObject.name} - {nameof(_type)} == {nameof(TYPE.NumberOfEnemy)}. Return {nameof(TYPE.LastIndex)} type.";
                 ErrorsManager.Instance.SendWarningMsg(warningMsg);
             }
@@ -75,6 +81,26 @@ public class EnemyHead : MonoBehaviour
         }
     }
 
+    #endregion
+
+
+    // -----------------------------------------------------------------------
+    // Protected Methods
+    // -----------------------------------------------------------------------
+
+    #region Private Methods
+
+    protected virtual void ResetSettings()
+    {
+
+    }
+
+    protected virtual void InitialSettings()
+    {
+        Transform mainBodyTransform = transform.GetChild(0);
+        _body = mainBodyTransform.GetComponent<EnemyBody>();
+        _powerUps = GetComponent<EnemyPowerUp>();
+    }
 
     #endregion
 
@@ -87,15 +113,24 @@ public class EnemyHead : MonoBehaviour
 
     private void OnEnable()
     {
-        _body.transform.SetPositionAndRotation(transform.position, transform.rotation);
+        ResetSettings();
     }
 
     private void Awake()
     {
-        _body = GetComponentInChildren<EnemyBody>(true);
+        InitialSettings();
     }
 
     private bool IsCorrectType() => (_type != TYPE.NumberOfEnemy);
+
+
+    protected virtual void Deactivate()
+    {
+        gameObject.SetActive(false);
+        _body.gameObject.SetActive(true);
+
+        OnDeathEvent?.Invoke();
+    }
 
     #endregion
 }

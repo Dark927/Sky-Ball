@@ -1,8 +1,7 @@
 ﻿using UnityEngine;
-using UnityEngine.SceneManagement;
 
 [RequireComponent(typeof(Rigidbody))]
-public class PlayerController : MonoBehaviour
+public class PlayerMovement : MonoBehaviour
 {
     // -----------------------------------------------------------------------
     // Fields
@@ -15,19 +14,13 @@ public class PlayerController : MonoBehaviour
 
     [SerializeField] private float _basicSpeed = 5f;
     [SerializeField] private Transform _focalPoint;
-    [SerializeField] private float _pushForce = 2f;
 
     [Space]
 
-    [SerializeField] private string _groundTag = "Ground";
     private bool _onGround = true;
     private Vector3 _groundContactPoint;
-
     private Rigidbody _playerRb;
-
     private float _forwardInput = 0;
-
-    [SerializeField] private float _fallBoundY = -5f;
 
     #endregion
 
@@ -38,9 +31,20 @@ public class PlayerController : MonoBehaviour
 
     #region Public Methods
 
+    public float BasicSpeed => _basicSpeed;
     public bool OnGround => _onGround;
-    public float PushForce => _pushForce;
     public Vector3 GroundContactPoint => _groundContactPoint;
+
+    public void SetGroundContactInfo(Vector3 groundContactPoint)
+    {
+        _onGround = true;
+        _groundContactPoint = groundContactPoint;
+    }
+
+    public void SetGroundContactInfo(bool onGround)
+    {
+        _onGround = onGround;
+    }
 
     #endregion
 
@@ -59,9 +63,9 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
-        if (transform.position.y < _fallBoundY)
+        if (transform.position.y < PositionManager.Instance.DeathBoundY) 
         {
-            RestartGame();
+            GameManager.Instance.RestartGame();
         }
 
         _forwardInput = Input.GetAxis("Vertical");
@@ -69,31 +73,7 @@ public class PlayerController : MonoBehaviour
 
     private void FixedUpdate()
     {
-        _playerRb.AddForce(_focalPoint.forward * _basicSpeed * _forwardInput);
-    }
-
-    private void OnCollisionEnter(Collision collision)
-    {
-        if (collision.gameObject.CompareTag(_groundTag))
-        {
-            _onGround = true;
-            _groundContactPoint = collision.GetContact(0).point;
-        }
-    }
-
-    private void OnCollisionExit(Collision collision)
-    {
-        if (collision.gameObject.CompareTag(_groundTag))
-        {
-            _onGround = false;
-        }
-    }
-
-
-    private void RestartGame()
-    {
-        Scene currentScene = SceneManager.GetActiveScene();
-        SceneManager.LoadScene(currentScene.name);
+        _playerRb.AddForce(_focalPoint.forward * _basicSpeed * _forwardInput, ForceMode.Acceleration);
     }
 
     #endregion

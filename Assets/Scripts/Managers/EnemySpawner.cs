@@ -62,7 +62,7 @@ public class EnemySpawner : MonoBehaviour
         }
         else
         {
-            string warningMsg = $"Skip wave, list of available enemies is empty! - {gameObject.name}";
+            string warningMsg = $"Empty wave, list of available enemies is empty! - {gameObject.name}";
             ErrorsManager.Instance.SendWarningMsg(warningMsg);
         }
     }
@@ -125,6 +125,8 @@ public class EnemySpawner : MonoBehaviour
                 enemyToSpawn.gameObject.SetActive(true);
             }
         }
+
+        enemyToSpawn.TryActivatePowers();
     }
 
     #endregion

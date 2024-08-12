@@ -80,13 +80,13 @@ public class DifficultyManager : MonoBehaviour
 
             case WaveType.Easy:
                 {
-                    List<EnemyHead.TYPE> enemyTypesToSpawn = new() { EnemyHead.TYPE.Default, EnemyHead.TYPE.Fast, EnemyHead.TYPE.Range };
+                    List<EnemyHead.TYPE> enemyTypesToSpawn = new() { EnemyHead.TYPE.Fast };
                     return GetWaveEnemyTypes(pool, enemyTypesToSpawn);
                 }
 
             case WaveType.Medium:
                 {
-                    List<EnemyHead.TYPE> enemyTypesToSpawn = new() { EnemyHead.TYPE.Default, EnemyHead.TYPE.Fast, EnemyHead.TYPE.Heavy };
+                    List<EnemyHead.TYPE> enemyTypesToSpawn = new() { EnemyHead.TYPE.Default, EnemyHead.TYPE.Fast, EnemyHead.TYPE.Heavy, EnemyHead.TYPE.Group };
                     return GetWaveEnemyTypes(pool, enemyTypesToSpawn);
                 }
 

@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class EnemyRangeHead : EnemyHead
+public class EnemyPowerUp : MonoBehaviour
 {
     // -----------------------------------------------------------------------
     // Fields 
@@ -13,8 +13,22 @@ public class EnemyRangeHead : EnemyHead
 
     [SerializeField] private RocketLauncher _rocketLauncher;
 
-    public EnemyBody Body => _body;
+    #endregion
 
+
+    // -----------------------------------------------------------------------
+    // Public Methods
+    // -----------------------------------------------------------------------
+
+    #region Public Methods
+
+    public void TryActivateRocketLauncher()
+    {
+        if (_rocketLauncher != null)
+        {
+            _rocketLauncher.StartRocketAttack<PlayerMovement>();
+        }
+    }
 
     #endregion
 
@@ -25,12 +39,8 @@ public class EnemyRangeHead : EnemyHead
 
     #region Private Methods
 
-    private void Start()
-    {
-        _rocketLauncher.StartRocketAttack<PlayerController>();
-    }
+
 
     #endregion
-
 
 }

@@ -46,11 +46,17 @@ public class RocketLauncher : MonoBehaviour
         GameObject rocket = _rocketsPool.RequestInactiveObject(true);
         rocket.transform.SetPositionAndRotation(_shootPoint.position, lookRotation);
 
-
         RocketLogic rocketLogic = rocket.GetComponent<RocketLogic>();
 
-        if (rocketLogic != null) rocketLogic.SetTarget(target);
-        else Debug.Log($"# Error : {nameof(rocketLogic)} is null, can not set target. - {gameObject.name}");
+        if (rocketLogic != null)
+        {
+            rocketLogic.SetTarget(target);
+        }
+        else
+        {
+            string errorMsg = $"{nameof(rocketLogic)} is null, can not set target. - {gameObject.name}";
+            ErrorsManager.Instance.SendErrorMsg(errorMsg);
+        }
 
         rocket.SetActive(true);
 
@@ -85,7 +91,7 @@ public class RocketLauncher : MonoBehaviour
             {
                 LaunchRocket(target.transform);
             }
-            
+
             yield return new WaitForSeconds(_reloadTime);
         }
     }

@@ -50,7 +50,7 @@ public class PlayerPowerUp : MonoBehaviour
     private Vector3 _indicatorOffset = new Vector3(0, -0.55f, 0);
     private Vector3 _indicatorRotation = new Vector3(0, 90f, 0);
 
-    private PlayerController _player;
+    private PlayerMovement _player;
     private Collider _collider;
 
     #endregion
@@ -63,7 +63,7 @@ public class PlayerPowerUp : MonoBehaviour
 
     private void Awake()
     {
-        _player = GetComponent<PlayerController>();
+        _player = GetComponent<PlayerMovement>();
         _collider = GetComponent<Collider>();
         _indicatorMaterial = _powerUpIndicator.GetComponent<MeshRenderer>().material;
 

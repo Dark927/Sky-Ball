@@ -94,7 +94,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1233643210418099701}
-  - component: {fileID: 6851922116049543953}
+  - component: {fileID: 7072315140496199432}
+  - component: {fileID: 4880008753188027414}
   m_Layer: 0
   m_Name: Enemy_Range
   m_TagString: Untagged
@@ -119,7 +120,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &6851922116049543953
+--- !u!114 &7072315140496199432
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -128,13 +129,25 @@ MonoBehaviour:
   m_GameObject: {fileID: 1233643210418099694}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 797541f73fd4d1344abb718831bbd373, type: 3}
+  m_Script: {fileID: 11500000, guid: 9f37f1621a4a0844488f2b09c03ba390, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _type: 4
   OnDeathEvent:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &4880008753188027414
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1233643210418099694}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e894aa583f192ae4a941c7536de8accf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
   _rocketLauncher: {fileID: 5803652790285985553}
 --- !u!1 &2131986307702718925
 GameObject:
@@ -472,7 +485,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 145dfa5497af9224ca204de585a298c3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _basicSpeed: 0.3
+  _basicSpeed: 0.6
   _deathBoundY: -10
 --- !u!114 &8046095619011877354
 MonoBehaviour:

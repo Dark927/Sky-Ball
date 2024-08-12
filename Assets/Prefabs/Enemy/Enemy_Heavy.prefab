@@ -46,6 +46,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _type: 1
+  OnDeathEvent:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &7434037309838057766
 GameObject:
   m_ObjectHideFlags: 0
@@ -175,7 +178,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 145dfa5497af9224ca204de585a298c3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _basicSpeed: 20
+  _basicSpeed: 4
   _deathBoundY: -10
 --- !u!114 &7434037309838057772
 MonoBehaviour:

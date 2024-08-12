@@ -45,16 +45,14 @@ public class EnemyCollisions : MonoBehaviour
     private void OnCollisionEnter(Collision collision)
     {
         // Push player
-
-        PlayerController playerController = collision.gameObject.GetComponent<PlayerController>();
-
-        if (playerController != null)
+        
+        if (collision.gameObject.TryGetComponent(out PlayerMovement player))
         {
-            Push(playerController);
+            Push(player);
         }
     }
 
-    private void Push(PlayerController player)
+    private void Push(PlayerMovement player)
     {
         Rigidbody playerRb = player.GetComponent<Rigidbody>();
 

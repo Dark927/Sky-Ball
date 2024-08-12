@@ -24,7 +24,7 @@ public class SpawnPoint : MonoBehaviour
     public void Spawn(EnemyHead enemyToSpawn)
     {
         _isBlocked = true;
-        Vector3 spawnPos = new Vector3(transform.position.x, 0, transform.position.z);
+        Vector3 spawnPos = new Vector3(transform.position.x, enemyToSpawn.transform.position.y, transform.position.z);
 
         enemyToSpawn.transform.position = spawnPos;
         enemyToSpawn.gameObject.SetActive(true);

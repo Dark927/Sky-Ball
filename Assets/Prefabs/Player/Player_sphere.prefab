@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 4746699175001688161}
   - component: {fileID: 4746699175001688162}
   - component: {fileID: 4746699175001688165}
+  - component: {fileID: 1578201747429500226}
   - component: {fileID: 4011086793555132333}
   m_Layer: 0
   m_Name: Player_sphere
@@ -125,12 +126,25 @@ MonoBehaviour:
   m_GameObject: {fileID: 4746699175001688163}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ad2e2b69614cf074eb0b1bb8bc1e09b9, type: 3}
+  m_Script: {fileID: 11500000, guid: 00b113b81c5e9a2419cceb717d358c5e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _basicSpeed: 7
+  _basicSpeed: 5
   _focalPoint: {fileID: 0}
-  _fallBoundY: -5
+  _pushForce: 2
+  _groundTag: Ground
+--- !u!114 &1578201747429500226
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4746699175001688163}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d15785984806481489533b65aafc1af1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &4011086793555132333
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -144,7 +158,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _rocketLauncher: {fileID: 0}
-  _explosionPrefab: {fileID: 5236669175025132845, guid: 6c935dfb229155d43a850dfa39be4e5f, type: 3}
+  _explosionsSource: {fileID: 0}
   _lightningsSource: {fileID: 0}
   _minStrikesCount: 1
   _maxStrikesCount: 4

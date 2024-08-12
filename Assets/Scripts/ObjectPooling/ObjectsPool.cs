@@ -26,7 +26,7 @@ public class ObjectsPool : MonoBehaviour
 
     public GameObject RequestInactiveObject(bool allowExpansion = false)
     {
-        if(_pool == null)
+        if (_pool == null)
         {
             throw new NullReferenceException($"Pool is not initialized - {gameObject.name}.");
         }
@@ -43,9 +43,7 @@ public class ObjectsPool : MonoBehaviour
 
         if (allowExpansion)
         {
-            {
-                return AddNewElement(_objectData.Prefab, _container.transform);
-            }
+            return AddNewElement(_objectData.Prefab, _container.transform);
         }
 
         return null;

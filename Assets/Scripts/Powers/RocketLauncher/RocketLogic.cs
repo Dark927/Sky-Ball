@@ -1,4 +1,5 @@
 using System.Collections;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class RocketLogic : MonoBehaviour
@@ -76,22 +77,7 @@ public class RocketLogic : MonoBehaviour
 
     private void OnEnable()
     {
-        if (_target != null)
-        {
-            CalculateAutoAim(_target);
-        }
-
-        _projectileVFX.SetActive(true);
-    }
-
-    private void Start()
-    {
-        if (_target != null)
-        {
-            CalculateAutoAim(_target);
-        }
-
-        _projectileVFX.SetActive(true);
+        SetStartSettings();
     }
 
     private void Awake()
@@ -99,14 +85,52 @@ public class RocketLogic : MonoBehaviour
         _collider = GetComponent<Collider>();
     }
 
+    private void Start()
+    {
+        SetStartSettings();
+
+        if (WavesManager.Instance == null)
+        {
+            Debug.Log("null");
+        }
+        else
+        {
+            WavesManager.Instance.OnNextWaveStart.AddListener(Explode);
+        }
+    }
+
+    private void SetStartSettings()
+    {
+        if (_target != null)
+        {
+            if (_target.gameObject.activeInHierarchy)
+            {
+                CalculateAutoAim(_target);
+                _projectileVFX.SetActive(true);
+
+                return;
+            }
+        }
+        gameObject.SetActive(false);
+    }
+
     private void Update()
     {
-        if (_exploded) return;
+        if (_exploded)
+        {
+            return;
+        }
 
-        bool readyToExplode = ((_target == null) || (transform.position.y < _explodeBound.y));
+        bool readyToExplode = (!_target.gameObject.activeInHierarchy) || (transform.position.y < _explodeBound.y);
 
-        if (readyToExplode) Explode();
-        else RocketFly(_target);
+        if (readyToExplode)
+        {
+            Explode();
+        }
+        else
+        {
+            RocketFly(_target);
+        }
     }
 
     private bool IsRocketEffectsActive()
@@ -161,7 +185,7 @@ public class RocketLogic : MonoBehaviour
         {
             case OWNER.Player:
                 {
-                    if (HasComponentOfType<PlayerController>(targetObject)) return;
+                    if (HasComponentOfType<PlayerMovement>(targetObject)) return;
 
                     PushTarget<EnemyBody>(targetObject);
                 }
@@ -172,7 +196,7 @@ public class RocketLogic : MonoBehaviour
                 {
                     if (HasComponentOfType<EnemyBody>(targetObject)) return;
 
-                    PushTarget<PlayerController>(targetObject);
+                    PushTarget<PlayerMovement>(targetObject);
                 }
                 break;
         }
@@ -212,9 +236,13 @@ public class RocketLogic : MonoBehaviour
 
     private void Explode()
     {
-        SetExplosionSettings();
-        PlayHitVFX(transform.position, transform.rotation);
-        StartCoroutine(ConfigureActiveStates());
+        if (gameObject.activeInHierarchy)
+        {
+            SetExplosionSettings();
+            PlayHitVFX(transform.position, transform.rotation);
+
+            StartCoroutine(ConfigureActiveStates());
+        }
     }
 
     private void SetExplosionSettings()

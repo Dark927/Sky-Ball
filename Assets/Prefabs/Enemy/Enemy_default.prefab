@@ -109,9 +109,9 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3107115791497949162}
   serializedVersion: 2
-  m_Mass: 0.75
-  m_Drag: 0
-  m_AngularDrag: 0.05
+  m_Mass: 0.5
+  m_Drag: 0.1
+  m_AngularDrag: 0.1
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
@@ -129,8 +129,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 145dfa5497af9224ca204de585a298c3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _basicSpeed: 4
-  _deathBoundY: -10
+  _basicSpeed: 5
 --- !u!114 &3107115791497949163
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -143,7 +142,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7f2dc79830326ec40a9fcd45160251aa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _pushForce: 2
+  _pushForce: 7
   _speedDiffMultiplierMax: 1.1
   _speedDiffMultiplierMin: 0.5
 --- !u!114 &7888195416382789870
@@ -169,7 +168,7 @@ GameObject:
   - component: {fileID: 9022199323014061538}
   - component: {fileID: 874927303755267360}
   m_Layer: 0
-  m_Name: Enemy_default
+  m_Name: Enemy_Default
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
