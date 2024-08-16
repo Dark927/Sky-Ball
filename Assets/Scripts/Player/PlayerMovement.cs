@@ -83,7 +83,7 @@ public class PlayerMovement : MonoBehaviour
     {
         if (transform.position.y < PositionManager.Instance.DeathBoundY)
         {
-            GameManager.Instance.RestartGame();
+            GameManager.Instance.GameOver();
         }
     }
 

@@ -39,39 +39,7 @@ public class ErrorsManager : MonoBehaviour
         }
     }
 
-    #endregion
-
-
-    // -----------------------------------------------------------------------
-    // Private Methods
-    // -----------------------------------------------------------------------
-
-    #region Private Methods
-
-    private void Awake()
-    {
-        SetInstance();
-    }
-
-    private void SetInstance()
-    {
-        if (Instance == null)
-        {
-            Instance = this;
-            DontDestroyOnLoad(gameObject);
-        }
-        else
-        {
-            Destroy(gameObject);
-        }
-    }
-
-    private void Start()
-    {
-        CheckManagersState();
-    }
-
-    private void CheckManagersState()
+    public void CheckGameplayManagersState()
     {
         bool isFatal = false;
 
@@ -107,6 +75,33 @@ public class ErrorsManager : MonoBehaviour
         {
 
             SendErrorMsg("Some of Managers is null, can not start the game.", true);
+        }
+    }
+
+    #endregion
+
+
+    // -----------------------------------------------------------------------
+    // Private Methods
+    // -----------------------------------------------------------------------
+
+    #region Private Methods
+
+    private void Awake()
+    {
+        SetInstance();
+    }
+
+    private void SetInstance()
+    {
+        if (Instance == null)
+        {
+            Instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
+        else
+        {
+            Destroy(gameObject);
         }
     }
 

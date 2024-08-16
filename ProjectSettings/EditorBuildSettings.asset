@@ -6,6 +6,9 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
+    path: Assets/Scenes/MainMenu.unity
+    guid: 5916297ebb2ec5b4b948ec54d8a8f2d5
+  - enabled: 1
     path: Assets/Scenes/SkyBall.unity
     guid: a4b96ad7a65484fd4a83cb97540eee50
   m_configObjects: {}

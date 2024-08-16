@@ -5,10 +5,9 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager Instance;
 
-    public void RestartGame()
+    public void GameOver()
     {
-        Scene currentScene = SceneManager.GetActiveScene();
-        SceneManager.LoadScene(currentScene.name);
+        SceneLoader.Instance.RestartScene();
     }
 
     private void Awake()
@@ -21,11 +20,15 @@ public class GameManager : MonoBehaviour
         if (Instance == null)
         {
             Instance = this;
-            DontDestroyOnLoad(gameObject);
         }
         else
         {
             Destroy(gameObject);
         }
+    }
+
+    private void Start()
+    {
+        ErrorsManager.Instance.CheckGameplayManagersState();
     }
 }
