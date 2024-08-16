@@ -66,6 +66,7 @@ public class EnemyMovement : MonoBehaviour
         if (IsOutOfBounds())
         {
             _body.Die();
+            return;
         }
 
         CalculateMoveDirection();

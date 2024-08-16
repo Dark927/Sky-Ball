@@ -8,7 +8,7 @@ public class PositionManager : MonoBehaviour
     [Space]
 
     public static PositionManager Instance;
-    [SerializeField] private float _fallBoundY = -5f;
+    [SerializeField] private float _fallBoundY = -2f;
 
 
     [Space]

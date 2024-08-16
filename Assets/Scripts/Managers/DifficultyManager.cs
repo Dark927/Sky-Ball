@@ -25,13 +25,10 @@ public class DifficultyManager : MonoBehaviour
 
     public static DifficultyManager Instance;
 
-    private int _enemiesToSpawn = 2;
+    [SerializeField] private int _enemiesToSpawn = 2;
     private int _powersToSpawn = 1;
-    private int _waveCount = 0;
     private int _increaseEnemyCountInterval = 3;
 
-    private List<WaveType> _waveTypes = new List<WaveType> { WaveType.Start, WaveType.Easy, WaveType.Medium, WaveType.Hard, WaveType.Boss };
-    private List<int> _waveBounds = new List<int> { 2, 3, 6, 9, 11 };
 
     #endregion
 
@@ -54,11 +51,9 @@ public class DifficultyManager : MonoBehaviour
 
     #region Public Methods
 
-    public void NextWave()
+    public void TryUpdateDifficultySettings()
     {
-        _waveCount += 1;
-
-        if ((_waveCount % _increaseEnemyCountInterval) == 0)
+        if ((WavesManager.Instance.CurrentWave % _increaseEnemyCountInterval) == 0)
         {
             _enemiesToSpawn++;
             _powersToSpawn++;
@@ -67,7 +62,7 @@ public class DifficultyManager : MonoBehaviour
 
     public List<EnemyHead.TYPE> AvailableEnemyTypes(EnemyPool pool)
     {
-        WaveType type = GetWaveType();
+        WaveType type = WavesManager.Instance.CurrentWaveType;
 
         switch (type)
         {
@@ -80,19 +75,19 @@ public class DifficultyManager : MonoBehaviour
 
             case WaveType.Easy:
                 {
-                    List<EnemyHead.TYPE> enemyTypesToSpawn = new() { EnemyHead.TYPE.Fast };
+                    List<EnemyHead.TYPE> enemyTypesToSpawn = new() { EnemyHead.TYPE.Default, EnemyHead.TYPE.Fast };
                     return GetWaveEnemyTypes(pool, enemyTypesToSpawn);
                 }
 
             case WaveType.Medium:
                 {
-                    List<EnemyHead.TYPE> enemyTypesToSpawn = new() { EnemyHead.TYPE.Default, EnemyHead.TYPE.Fast, EnemyHead.TYPE.Heavy, EnemyHead.TYPE.Group };
+                    List<EnemyHead.TYPE> enemyTypesToSpawn = new() { EnemyHead.TYPE.Default, EnemyHead.TYPE.Fast, EnemyHead.TYPE.Heavy };
                     return GetWaveEnemyTypes(pool, enemyTypesToSpawn);
                 }
 
             case WaveType.Hard:
                 {
-                    List<EnemyHead.TYPE> enemyTypesToSpawn = new() { EnemyHead.TYPE.Fast, EnemyHead.TYPE.Heavy, EnemyHead.TYPE.Group, EnemyHead.TYPE.Range };
+                    List<EnemyHead.TYPE> enemyTypesToSpawn = new() { EnemyHead.TYPE.Fast, EnemyHead.TYPE.Heavy, EnemyHead.TYPE.Range };
                     return GetWaveEnemyTypes(pool, enemyTypesToSpawn);
                 }
 
@@ -128,19 +123,6 @@ public class DifficultyManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
-    }
-
-    private WaveType GetWaveType()
-    {
-        for (int i = 0; i < _waveBounds.Count; ++i)
-        {
-            if (_waveCount < _waveBounds[i])
-            {
-                return _waveTypes[i];
-            }
-        }
-
-        return WaveType.Hard;
     }
 
     private List<EnemyHead.TYPE> GetWaveEnemyTypes(EnemyPool pool, List<EnemyHead.TYPE> enemyTypesToSpawn)

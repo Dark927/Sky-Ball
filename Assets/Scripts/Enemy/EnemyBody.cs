@@ -20,6 +20,8 @@ public class EnemyBody : MonoBehaviour
     public virtual void Die()
     {
         gameObject.SetActive(false);
+        TryActivateVFX();
+
         ResetSettings();
 
         foreach (EnemyBody childBody in _childrenBodyList)
@@ -53,6 +55,14 @@ public class EnemyBody : MonoBehaviour
         _rb = GetComponent<Rigidbody>();
         _startPosition = transform.position;
         _childrenBodyList = new List<EnemyBody>(GetComponentsInChildren<EnemyBody>().Where(child => child.gameObject != gameObject));
+    }
+
+    private void TryActivateVFX()
+    {
+        if (_head.VFX != null)
+        {
+            _head.VFX.Explode(transform.position);
+        }
     }
 
     #endregion

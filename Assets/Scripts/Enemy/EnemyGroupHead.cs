@@ -10,14 +10,14 @@ public class EnemyGroupHead : EnemyHead
     protected override void InitialSettings()
     {
         base.InitialSettings();
-        _childrenBody = new List<EnemyBody>(GetComponentsInChildren<EnemyBody>().Where(child => child != _body));
+        _childrenBody = new List<EnemyBody>(GetComponentsInChildren<EnemyBody>().Where(child => child != _mainBody));
     }
 
     protected override void Deactivate()
     {
         gameObject.SetActive(false);
 
-        _body.gameObject.SetActive(true);
+        _mainBody.gameObject.SetActive(true);
 
         foreach (EnemyBody child in _childrenBody)
         {

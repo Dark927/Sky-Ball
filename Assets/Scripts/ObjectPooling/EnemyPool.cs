@@ -30,7 +30,13 @@ public class EnemyPool : MultipleObjectsPool
 
             if (firstEnemy.Type == type)
             {
-                return FindInactiveObjectInList(objectsList).GetComponent<EnemyHead>();
+                GameObject inactiveEnemyObj = FindInactiveObjectInList(objectsList);
+
+                if (inactiveEnemyObj != null)
+                {
+                    return inactiveEnemyObj.GetComponent<EnemyHead>();
+                }
+                break;
             }
         }
 
@@ -68,7 +74,7 @@ public class EnemyPool : MultipleObjectsPool
         {
             return true;
         }
-     
+
         return false;
     }
 

@@ -107,6 +107,11 @@ public class EnemySpawner : MonoBehaviour
 
     private void SpawnEnemy(EnemyHead enemyToSpawn)
     {
+        if(enemyToSpawn == null)
+        {
+            return;
+        }
+
         SpawnPoint availableSpawner = PositionManager.Instance.FindFarthestSpawner(_allSpawnersList);
 
         if (availableSpawner != null)

@@ -27,9 +27,10 @@ public class FinishDefaultEffect : MonoBehaviour
 
     private void Update()
     {
-        if (IsParticlesAlive()) return;
-
-        SetFinishOptions();
+        if (!IsParticlesAlive())
+        {
+            SetFinishOptions();
+        }
     }
 
     #endregion

@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -37,33 +38,22 @@ public class EnemyHead : MonoBehaviour
     [SerializeField] private TYPE _type;
 
     [HideInInspector] public UnityEvent OnDeathEvent = new();
-    protected EnemyBody _body;
+
+    protected EnemyBody _mainBody;
     protected EnemyPowerUp _powerUps;
+
+    private EnemyVFX _enemyVFX;
 
     #endregion
 
 
     // -----------------------------------------------------------------------
-    // Public Methods
+    // Properties
     // -----------------------------------------------------------------------
 
-    #region Public Methods
+    #region Properties
 
-    public virtual void TryDeactivate()
-    {
-        if (!_body.gameObject.activeInHierarchy)
-        {
-            Deactivate();
-        }
-    }
-
-    public void TryActivatePowers()
-    {
-        if (_powerUps != null)
-        {
-            _powerUps.TryActivateRocketLauncher();
-        }
-    }
+    public EnemyVFX VFX => _enemyVFX;
 
     public TYPE Type
     {
@@ -85,6 +75,38 @@ public class EnemyHead : MonoBehaviour
 
 
     // -----------------------------------------------------------------------
+    // Public Methods
+    // -----------------------------------------------------------------------
+
+    #region Public Methods
+
+    public virtual void TryDeactivate()
+    {
+        if (!_mainBody.gameObject.activeInHierarchy)
+        {
+            if (HasActiveChildren())
+            {
+                StartCoroutine(DeactivateRoutine());
+            }
+            else
+            {
+                Deactivate();
+            }
+        }
+    }
+
+    public void TryActivatePowers()
+    {
+        if (_powerUps != null)
+        {
+            _powerUps.TryActivateRocketLauncher();
+        }
+    }
+
+    #endregion
+
+
+    // -----------------------------------------------------------------------
     // Protected Methods
     // -----------------------------------------------------------------------
 
@@ -98,8 +120,17 @@ public class EnemyHead : MonoBehaviour
     protected virtual void InitialSettings()
     {
         Transform mainBodyTransform = transform.GetChild(0);
-        _body = mainBodyTransform.GetComponent<EnemyBody>();
+        _mainBody = mainBodyTransform.GetComponent<EnemyBody>();
         _powerUps = GetComponent<EnemyPowerUp>();
+        _enemyVFX = GetComponent<EnemyVFX>();
+    }
+
+    protected virtual void Deactivate()
+    {
+        gameObject.SetActive(false);
+        _mainBody.gameObject.SetActive(true);
+
+        OnDeathEvent?.Invoke();
     }
 
     #endregion
@@ -121,15 +152,47 @@ public class EnemyHead : MonoBehaviour
         InitialSettings();
     }
 
+    private void Start()
+    {
+        SetOnDeathEventListeners();
+    }
+
     private bool IsCorrectType() => (_type != TYPE.NumberOfEnemy);
 
-
-    protected virtual void Deactivate()
+    private bool HasActiveChildren()
     {
-        gameObject.SetActive(false);
-        _body.gameObject.SetActive(true);
+        for (int currentChild = 0; currentChild < transform.childCount; currentChild++)
+        {
+            Transform child = transform.GetChild(currentChild);
 
-        OnDeathEvent?.Invoke();
+            if (child.gameObject.activeSelf)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private IEnumerator DeactivateRoutine()
+    {
+        while (true)
+        {
+            if (!HasActiveChildren())
+            {
+                break;
+            }
+
+            yield return null;
+        }
+
+        Deactivate();
+    }
+
+    private void SetOnDeathEventListeners()
+    {
+        OnDeathEvent.AddListener(WavesManager.Instance.DecrementAliveEnemiesCount);
+        OnDeathEvent.AddListener(WavesManager.Instance.TryStartNextWave);
+        OnDeathEvent.AddListener(DynamicUI.Instance.UpdateEnemyCount);
     }
 
     #endregion
