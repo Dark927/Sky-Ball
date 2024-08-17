@@ -1,19 +1,15 @@
 using UnityEngine;
-using UnityEngine.Events;
 
-public class GameManager : SingletonBase<GameManager>
+public class PauseManager : SingletonBase<PauseManager>
 {
     // -----------------------------------------------------------------------
     // Fields
     // -----------------------------------------------------------------------
 
-    #region Fields 
+    #region Fieds
 
-    public UnityEvent OnGamePauseEvent = new();
-    public UnityEvent OnGameResumeEvent = new();
-
-    private uint _sessionKills = 0;
-
+    private bool _paused = false;
+    
     #endregion
 
 
@@ -23,7 +19,7 @@ public class GameManager : SingletonBase<GameManager>
 
     #region Properties
 
-    public uint SessionKills => _sessionKills;
+    public bool Paused => _paused;
 
     #endregion
 
@@ -34,14 +30,16 @@ public class GameManager : SingletonBase<GameManager>
 
     #region Public Methods
 
-    public void GameOver()
+    public void Pause()
     {
-        SceneLoader.Instance.RestartScene();
+        Time.timeScale = 0;
+        _paused = true;
     }
 
-    public void IncrementSessionKills()
+    public void Unpause()
     {
-        _sessionKills++;
+        Time.timeScale = 1f;
+        _paused = false;
     }
 
     #endregion
@@ -53,30 +51,6 @@ public class GameManager : SingletonBase<GameManager>
 
     #region Private Methods
 
-    private void Start()
-    {
-        ErrorsManager.Instance.CheckGameplayManagersState();
-    }
-
-    private void Update()
-    {
-        CheckGamePause();
-    }
-
-    private void CheckGamePause()
-    {
-        if (Input.GetKeyDown(KeyCode.Escape))
-        {
-            if (PauseManager.Instance.Paused)
-            {
-                OnGameResumeEvent.Invoke();
-            }
-            else
-            {
-                OnGamePauseEvent.Invoke();
-            }
-        }
-    }
 
     #endregion
 }

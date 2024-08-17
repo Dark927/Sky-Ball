@@ -15,15 +15,13 @@ public enum WaveType
     NumberOfWaves = LastIndex + 1,
 }
 
-public class DifficultyManager : MonoBehaviour
+public class DifficultyManager : SingletonBase<DifficultyManager>
 {
     // -----------------------------------------------------------------------
     // Fields
     // -----------------------------------------------------------------------
 
     #region Fields
-
-    public static DifficultyManager Instance;
 
     [SerializeField] private int _enemiesToSpawn = 2;
     private int _powersToSpawn = 1;
@@ -107,24 +105,6 @@ public class DifficultyManager : MonoBehaviour
     // -----------------------------------------------------------------------
 
     #region Private Methods
-
-    private void Awake()
-    {
-        SetInstance();
-    }
-
-    private void SetInstance()
-    {
-        if (Instance == null)
-        {
-            Instance = this;
-        }
-        else
-        {
-            Destroy(gameObject);
-        }
-    }
-
     private List<EnemyHead.TYPE> GetWaveEnemyTypes(EnemyPool pool, List<EnemyHead.TYPE> enemyTypesToSpawn)
     {
         List<EnemyHead.TYPE> waveEnemyTypes = new();

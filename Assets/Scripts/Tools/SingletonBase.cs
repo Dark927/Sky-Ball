@@ -1,7 +1,6 @@
 using UnityEngine;
-using TMPro;
 
-public class DynamicUI : MonoBehaviour
+public abstract class SingletonBase<Type> : MonoBehaviour where Type : SingletonBase<Type>
 {
     // -----------------------------------------------------------------------
     // Fields
@@ -9,28 +8,20 @@ public class DynamicUI : MonoBehaviour
 
     #region Fields
 
-    public static DynamicUI Instance;
-
-    [SerializeField] private TextMeshProUGUI _wavesCountText;
-    [SerializeField] private TextMeshProUGUI _enemyCountText;
+    public static Type Instance;
 
     #endregion
 
 
     // -----------------------------------------------------------------------
-    // Public Methods
+    // Protected Methods
     // -----------------------------------------------------------------------
 
-    #region Public Methods
+    #region Protected Methods
 
-    public void UpdateWavesCount()
+    protected virtual void Awake()
     {
-        _wavesCountText.text = $"{WavesManager.Instance.CurrentWave:00}";
-    }
-
-    public void UpdateEnemyCount()
-    {
-        _enemyCountText.text = $"{WavesManager.Instance.AliveEnemiesCount:00}";
+        SetInstance();
     }
 
     #endregion
@@ -42,16 +33,11 @@ public class DynamicUI : MonoBehaviour
 
     #region Private Methods
 
-    private void Awake()
-    {
-        SetInstance();
-    }
-
     private void SetInstance()
     {
         if (Instance == null)
         {
-            Instance = this;
+            Instance = (Type)this;
         }
         else
         {

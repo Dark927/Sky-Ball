@@ -6,10 +6,8 @@ using System.Collections.Generic;
 using UnityEditor;
 #endif
 
-public class ErrorsManager : MonoBehaviour
+public class ErrorsManager : SingletonBaseGlobal<ErrorsManager>
 {
-    public static ErrorsManager Instance;
-
     // -----------------------------------------------------------------------
     // Public Methods
     // -----------------------------------------------------------------------
@@ -87,23 +85,7 @@ public class ErrorsManager : MonoBehaviour
 
     #region Private Methods
 
-    private void Awake()
-    {
-        SetInstance();
-    }
 
-    private void SetInstance()
-    {
-        if (Instance == null)
-        {
-            Instance = this;
-            DontDestroyOnLoad(gameObject);
-        }
-        else
-        {
-            Destroy(gameObject);
-        }
-    }
 
     #endregion
 

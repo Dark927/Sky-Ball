@@ -39,7 +39,7 @@ public class PowerUpPool : MultipleObjectsPool
         {
             PowerUp firstPower = objectsList[0].GetComponent<PowerUp>();
 
-            if (firstPower.Type == type)
+            if (firstPower.Stats.Type == type)
             {
                 GameObject powerObject = FindInactiveObjectInList(objectsList);
 
@@ -66,7 +66,7 @@ public class PowerUpPool : MultipleObjectsPool
         foreach (List<GameObject> objectsList in _pool)
         {
             PowerUp firstPower = objectsList[0].GetComponent<PowerUp>();
-            availablePowerTypes.Add(firstPower.Type);
+            availablePowerTypes.Add(firstPower.Stats.Type);
         }
 
         _availablePowerTypes = availablePowerTypes;
@@ -103,7 +103,7 @@ public class PowerUpPool : MultipleObjectsPool
         PowerUp firstListPower = sourceList[0].GetComponent<PowerUp>();
         PowerUp powerToPush = objToPush.GetComponent<PowerUp>();
 
-        if (firstListPower.Type == powerToPush.Type)
+        if (firstListPower.Stats.Type == powerToPush.Stats.Type)
         {
             return true;
         }
@@ -128,7 +128,7 @@ public class PowerUpPool : MultipleObjectsPool
         {
             PowerUp power = objectData.Prefab.GetComponent<PowerUp>();
 
-            if (power.Type == targetType)
+            if (power.Stats.Type == targetType)
             {
                 powerToCreate = power;
                 break;
@@ -154,7 +154,7 @@ public class PowerUpPool : MultipleObjectsPool
         {
             PowerUp firstPower = objectsList[0].GetComponent<PowerUp>();
 
-            if (firstPower.Type == targetType)
+            if (firstPower.Stats.Type == targetType)
             {
                 PowerUp createdPower = Instantiate(powerToCreate, firstPower.transform.parent);
                 createdPower.name = firstPower.name;

@@ -10,7 +10,10 @@ public class PlayerPowerUp : MonoBehaviour
 
     #region Fields
 
-    // Powers settings 
+
+    [Header("Indicator Settings")]
+    [Space]
+    [SerializeField] private PowerUpIndicator _powerUpIndicator;
 
     [Header("Rockets power Settings")]
     [Space]
@@ -23,7 +26,7 @@ public class PlayerPowerUp : MonoBehaviour
     [SerializeField] private ExplosionsSource _explosionsSource;
     private float _jumpForceMultiplier = 50f;
     private float _checkGroundTimeDelay = 1f;
-    private Vector3 _explosionPositionOffset = new Vector3(0f, 0.1f, 0f);
+    private Vector3 _explosionPositionOffset = new(0f, 0.1f, 0f);
 
     [Header("Lightnings power Settings")]
     [Space]
@@ -33,25 +36,9 @@ public class PlayerPowerUp : MonoBehaviour
     [SerializeField] private int _maxStrikesCount = 4;
 
     private bool _hasPowerUp = false;
-
-    private PowerUp _power;
-    private PowerUp.TYPE _powerType;
-    private float _powerStrength = 0f;
-    private float _powerActiveTime = 0f;
-    private float _powerReloadTime = 1f;
-
-
-    // Indicator settings
-
-    [Header("Indicator Settings")]
-
-    [SerializeField] private GameObject _powerUpIndicator;
-    private Material _indicatorMaterial;
-    private Vector3 _indicatorOffset = new Vector3(0, -0.55f, 0);
-    private Vector3 _indicatorRotation = new Vector3(0, 90f, 0);
+    private PowerUp.Data _powerStats;
 
     private PlayerMovement _player;
-    private Collider _collider;
 
     #endregion
 
@@ -64,62 +51,38 @@ public class PlayerPowerUp : MonoBehaviour
     private void Awake()
     {
         _player = GetComponent<PlayerMovement>();
-        _collider = GetComponent<Collider>();
-        _indicatorMaterial = _powerUpIndicator.GetComponent<MeshRenderer>().material;
+        _powerUpIndicator.SetPlayerTransform(transform);
 
         if (_rocketLauncher == null)
         {
-            Debug.Log("# Warning : Rockets can not be launched. RocketLauncher == null. - " + gameObject.name);
+            string warningMsg = $"Rockets can not be launched. {nameof(_rocketLauncher)} is null. - {gameObject.name}";
+            ErrorsManager.Instance.SendWarningMsg(warningMsg);
         }
-    }
-
-    private void Update()
-    {
-        ConfigureIndicator();
-        UpdateRocketLauncherPosition();
-    }
-
-    private void UpdateRocketLauncherPosition()
-    {
-        _rocketLauncher.transform.position = new Vector3(transform.position.x, 0f, transform.position.z);
-    }
-
-    private void ConfigureIndicator()
-    {
-        _powerUpIndicator.transform.position = _player.transform.position + _indicatorOffset;
-        _powerUpIndicator.transform.Rotate(_indicatorRotation * Time.deltaTime);
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        _power = other.GetComponent<PowerUp>();
+        PowerUp foundPower = other.GetComponent<PowerUp>();
 
-        if (_power != null)
+        if (foundPower != null)
         {
-            // Remove current power up if it exists
-
-            StopAllCoroutines();
-
-            // Save new power up Fields 
-
-            ConfigurePowerFields(_power);
-            _power.gameObject.SetActive(false);
-
-            // Power up start Fields
+            _powerStats = foundPower.Stats;
+            foundPower.gameObject.SetActive(false);
+            
+            DisablePowerUp();
 
             _hasPowerUp = true;
-            _powerUpIndicator.SetActive(true);
-            StartCoroutine(PowerupCountdownRoutine(_powerActiveTime));
+            _powerUpIndicator.gameObject.SetActive(true);
+            _powerUpIndicator.SetColor(_powerStats.IndicatorColor);
 
-            // Activate different power types 
-
-            ActivatePowerUp();
+            StartCoroutine(PowerupCountdownRoutine(_powerStats.ActiveTime));
+            ActivatePowerUp(_powerStats.Type);
         }
     }
 
-    private void ActivatePowerUp()
+    private void ActivatePowerUp(PowerUp.TYPE powerType)
     {
-        switch (_powerType)
+        switch (powerType)
         {
             case PowerUp.TYPE.Rockets:
                 {
@@ -145,7 +108,17 @@ public class PlayerPowerUp : MonoBehaviour
     {
         if (_rocketLauncher != null)
         {
+            StartCoroutine(UpdateShootPointRoutine());
             _rocketLauncher.StartRocketAttack<EnemyMovement>();
+        }
+    }
+
+    private IEnumerator UpdateShootPointRoutine()
+    {
+        while (_hasPowerUp)
+        {
+            _rocketLauncher.UpdateShootPointPosition(transform.position);
+            yield return null;
         }
     }
 
@@ -155,7 +128,7 @@ public class PlayerPowerUp : MonoBehaviour
         {
             try
             {
-                _lightningsSource.ActivateLightnings<EnemyBody>(_powerStrength, _minStrikesCount, _maxStrikesCount);
+                _lightningsSource.ActivateLightnings<EnemyBody>(_powerStats.Strength, _minStrikesCount, _maxStrikesCount);
             }
             catch (Exception exception)
             {
@@ -163,17 +136,6 @@ public class PlayerPowerUp : MonoBehaviour
             }
         }
     }
-
-    private void ConfigurePowerFields(PowerUp power)
-    {
-        _indicatorMaterial.color = power.IndicatorColor;
-
-        _powerStrength = power.PowerUpStrength;
-        _powerType = power.Type;
-        _powerActiveTime = power.PowerActiveTime;
-        _powerReloadTime = power.PowerReloadTime;
-    }
-
 
     private void OnCollisionEnter(Collision collision)
     {
@@ -185,14 +147,14 @@ public class PlayerPowerUp : MonoBehaviour
             Vector3 awayFromPlayer = enemyRb.gameObject.transform.position - transform.position;
 
 
-            switch (_powerType)
+            switch (_powerStats.Type)
             {
                 case PowerUp.TYPE.Strength:
                     {
                         // Push enemy away from player
                         float massModifier = (enemyRb.mass < 1f) ? 1f : enemyRb.mass;
 
-                        enemyRb.AddForce(awayFromPlayer * _powerStrength * massModifier, ForceMode.Impulse);
+                        enemyRb.AddForce(awayFromPlayer * _powerStats.Strength * massModifier, ForceMode.Impulse);
                     }
                     break;
             }
@@ -201,19 +163,20 @@ public class PlayerPowerUp : MonoBehaviour
 
     private IEnumerator JumpAndExplodeRoutine()
     {
-        Rigidbody playerRb = _player.GetComponent<Rigidbody>();
-        playerRb.AddForce(Vector3.up * _powerStrength * _jumpForceMultiplier * Time.deltaTime, ForceMode.Impulse);
+        Rigidbody rb = _player.GetComponent<Rigidbody>();
+        rb.AddForce(Vector3.up * (_powerStats.Strength * _jumpForceMultiplier * Time.deltaTime), ForceMode.Impulse);
 
         yield return new WaitForSeconds(_checkGroundTimeDelay);
         while (!_player.OnGround) yield return null;
 
         if (_explosionsSource != null)
         {
-            _explosionsSource.ActivateExplosion(_player.GroundContactPoint + _explosionPositionOffset, _powerStrength);
+            _explosionsSource.ActivateExplosion(_player.GroundContactPoint + _explosionPositionOffset, _powerStats.Strength);
         }
         else
         {
-            Debug.Log($"# Error : {nameof(_explosionsSource)} == null. Explosion can not be executed. - {gameObject.name}");
+            string errorMsg = $"{nameof(_explosionsSource)} == null. Explosion can not be executed. - {gameObject.name}";
+            ErrorsManager.Instance.SendErrorMsg(errorMsg);
         }
     }
 
@@ -221,12 +184,15 @@ public class PlayerPowerUp : MonoBehaviour
     {
         yield return new WaitForSeconds(powerupActiveTime);
 
-        DisablePowerUp();
+        if (_hasPowerUp)
+        {
+            DisablePowerUp();
+        }
     }
 
     private void DisablePowerUp()
     {
-        _powerUpIndicator.SetActive(false);
+        _powerUpIndicator.gameObject.SetActive(false);
         _hasPowerUp = false;
         StopAllCoroutines();
 

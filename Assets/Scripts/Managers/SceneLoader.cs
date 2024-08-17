@@ -2,7 +2,7 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class SceneLoader : MonoBehaviour
+public class SceneLoader : SingletonBaseGlobal<SceneLoader>
 {
     // -----------------------------------------------------------------------
     // Fields
@@ -10,11 +10,11 @@ public class SceneLoader : MonoBehaviour
 
     #region Fields 
 
-    public static SceneLoader Instance;
-
     private ASyncLoader _asyncLoader;
     [SerializeField][HideInInspector] private string _gameplayScenePath;
+    [SerializeField][HideInInspector] private string _mainMenuScenePath;
 
+    [SerializeField] private float _startDelay = 0.5f;
     [SerializeField] private GameObject _loadingScreenUI;
 
     #endregion
@@ -45,8 +45,24 @@ public class SceneLoader : MonoBehaviour
         }
     }
 
-#endif
+    public SceneAsset MainMenuScene
+    {
+        get
+        {
+            if (!string.IsNullOrEmpty(_mainMenuScenePath))
+            {
+                return AssetDatabase.LoadAssetAtPath<SceneAsset>(_mainMenuScenePath);
+            }
+            return null;
+        }
 
+        set
+        {
+            _mainMenuScenePath = AssetDatabase.GetAssetPath(value);
+        }
+    }
+
+#endif
 
     public void RestartScene()
     {
@@ -56,8 +72,28 @@ public class SceneLoader : MonoBehaviour
 
     public void LoadGameplayScene()
     {
-        string sceneName = ConvertScenePathToName(_gameplayScenePath);
-        _asyncLoader.LoadSceneASync(sceneName, _loadingScreenUI);
+        LoadSceneByPath(_gameplayScenePath);
+    }
+
+    public void LoadMainMenuScene()
+    {
+        LoadSceneByPath(_mainMenuScenePath);
+    }
+
+    #endregion
+
+
+    // -----------------------------------------------------------------------
+    // Protected Methods
+    // -----------------------------------------------------------------------
+
+    #region Protected Methods
+
+    protected override void Awake()
+    {
+        base.Awake();
+
+        _asyncLoader = GetComponent<ASyncLoader>();
     }
 
     #endregion
@@ -69,24 +105,10 @@ public class SceneLoader : MonoBehaviour
 
     #region Private Methods
 
-    private void Awake()
+    private void LoadSceneByPath(string scenePath)
     {
-        SetInstance();
-
-        _asyncLoader = GetComponent<ASyncLoader>();
-    }
-
-    private void SetInstance()
-    {
-        if (Instance == null)
-        {
-            Instance = this;
-            DontDestroyOnLoad(gameObject);
-        }
-        else
-        {
-            Destroy(gameObject);
-        }
+        string sceneName = ConvertScenePathToName(scenePath);
+        _asyncLoader.LoadSceneASync(sceneName, _loadingScreenUI, _startDelay);
     }
 
     private string ConvertScenePathToName(string path)

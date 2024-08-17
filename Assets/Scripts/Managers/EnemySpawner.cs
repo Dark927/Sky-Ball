@@ -1,15 +1,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemySpawner : MonoBehaviour
+public class EnemySpawner : SingletonBase<EnemySpawner>
 {
     // -----------------------------------------------------------------------
     // Fields
     // -----------------------------------------------------------------------
 
     #region Fields 
-
-    public static EnemySpawner Instance;
 
     [Header("Enemy Settings")]
     [Space]
@@ -71,28 +69,25 @@ public class EnemySpawner : MonoBehaviour
 
 
     // -----------------------------------------------------------------------
+    // Protected Methods
+    // -----------------------------------------------------------------------
+
+    #region Protected Methods
+
+    protected override void Awake()
+    {
+        base.Awake();
+        ConfigureReferences();
+    }
+
+    #endregion
+
+
+    // -----------------------------------------------------------------------
     // Private Methods
     // -----------------------------------------------------------------------
 
     #region Private Methods
-
-    private void Awake()
-    {
-        SetInstance();
-        ConfigureReferences();
-    }
-
-    private void SetInstance()
-    {
-        if (Instance == null)
-        {
-            Instance = this;
-        }
-        else
-        {
-            Destroy(gameObject);
-        }
-    }
 
     private void ConfigureReferences()
     {

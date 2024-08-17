@@ -26,7 +26,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5947052775715003943}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 5.530677, y: 0, z: -2.1782203}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -59,11 +59,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 565e431cd28cf6c46aa62c0eca85bd05, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _powerType: 2
-  _powerUpActiveTime: 4
-  _powerUpStrength: 14
-  _powerUpReloadTime: 0
-  _indicatorColor: {r: 0, g: 0.7283018, b: 0.9622642, a: 1}
+  _stats:
+    _type: 2
+    _activeTime: 3
+    _strength: 14
+    _reloadTime: 0
+    _indicatorColor: {r: 0, g: 0.7285204, b: 1, a: 1}
 --- !u!1001 &8373323981135384545
 PrefabInstance:
   m_ObjectHideFlags: 0

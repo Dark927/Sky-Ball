@@ -181,6 +181,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2936728582827246532, guid: dece5f62b48b1d645b882851f63fa596, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: b425ad8ef0d8ab743bce4c5db88b3a1c, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: dece5f62b48b1d645b882851f63fa596, type: 3}
 --- !u!4 &2260824007620087654 stripped
@@ -193,6 +197,20 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 2924183030292528184, guid: dece5f62b48b1d645b882851f63fa596, type: 3}
   m_PrefabInstance: {fileID: 4034462978344290610}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &7880656631346540395
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2263483555246159114}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dae82556a3a12324795766e126fe9c60, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _indicatorOffset: {x: 0, y: -0.55, z: 0}
+  _indicatorRotation: {x: 0, y: 90, z: 0}
 --- !u!1001 &4034462979802797541
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -373,26 +391,42 @@ PrefabInstance:
     - target: {fileID: 4011086793555132333, guid: 118ef74ccc33a82408cc1b1e1e940b1b, type: 3}
       propertyPath: _powerUpIndicator
       value: 
-      objectReference: {fileID: 2263483555246159114}
+      objectReference: {fileID: 7880656631346540395}
     - target: {fileID: 4746699175001688161, guid: 118ef74ccc33a82408cc1b1e1e940b1b, type: 3}
       propertyPath: m_Material
       value: 
       objectReference: {fileID: 13400000, guid: 7cc95992f82d0044081b6fa3d39681b3, type: 2}
     - target: {fileID: 4746699175001688162, guid: 118ef74ccc33a82408cc1b1e1e940b1b, type: 3}
       propertyPath: m_Drag
-      value: 0.05
+      value: 0.1
       objectReference: {fileID: 0}
     - target: {fileID: 4746699175001688162, guid: 118ef74ccc33a82408cc1b1e1e940b1b, type: 3}
       propertyPath: m_Mass
       value: 2
       objectReference: {fileID: 0}
+    - target: {fileID: 4746699175001688162, guid: 118ef74ccc33a82408cc1b1e1e940b1b, type: 3}
+      propertyPath: m_AngularDrag
+      value: 0.1
+      objectReference: {fileID: 0}
     - target: {fileID: 4746699175001688163, guid: 118ef74ccc33a82408cc1b1e1e940b1b, type: 3}
       propertyPath: m_Name
-      value: Player_sphere
+      value: Body
+      objectReference: {fileID: 0}
+    - target: {fileID: 4746699175001688165, guid: 118ef74ccc33a82408cc1b1e1e940b1b, type: 3}
+      propertyPath: _basicSpeed
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 4746699175001688165, guid: 118ef74ccc33a82408cc1b1e1e940b1b, type: 3}
+      propertyPath: _boostForce
+      value: 15
       objectReference: {fileID: 0}
     - target: {fileID: 4746699175001688165, guid: 118ef74ccc33a82408cc1b1e1e940b1b, type: 3}
       propertyPath: _focalPoint
       value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 4746699175001688165, guid: 118ef74ccc33a82408cc1b1e1e940b1b, type: 3}
+      propertyPath: _boostStoppingTime
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 4746699175001688166, guid: 118ef74ccc33a82408cc1b1e1e940b1b, type: 3}
       propertyPath: m_RootOrder

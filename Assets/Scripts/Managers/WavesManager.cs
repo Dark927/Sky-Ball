@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
-public class WavesManager : MonoBehaviour
+public class WavesManager : SingletonBase<WavesManager>
 {
     // -----------------------------------------------------------------------
     // Fields
@@ -10,7 +10,6 @@ public class WavesManager : MonoBehaviour
 
     #region Fields
 
-    public static WavesManager Instance;
     public UnityEvent OnNextWaveStart = new();
 
     private int _currentWave = 0;
@@ -81,23 +80,6 @@ public class WavesManager : MonoBehaviour
 
     #region Private Methods
 
-    private void Awake()
-    {
-        SetInstance();
-    }
-
-    private void SetInstance()
-    {
-        if (Instance == null)
-        {
-            Instance = this;
-        }
-        else
-        {
-            Destroy(Instance);
-        }
-    }
-
     private void Start()
     {
         EnemySpawner.Instance.EnemyPool.AddEventListenerToAll(TryStartNextWave);
@@ -121,8 +103,7 @@ public class WavesManager : MonoBehaviour
         OnNextWaveStart.AddListener(PowersSpawner.Instance.SpawnNewPowers);
 
         OnNextWaveStart.AddListener(UpdateWaveInfo);  
-        OnNextWaveStart.AddListener(DynamicUI.Instance.UpdateWavesCount);
-        OnNextWaveStart.AddListener(DynamicUI.Instance.UpdateEnemyCount);
+        OnNextWaveStart.AddListener(UIManager.Instance.Gameplay.UpdateSessionInfo);
     }
 
     #endregion

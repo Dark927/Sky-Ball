@@ -1,15 +1,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PowersSpawner : MonoBehaviour
+public class PowersSpawner : SingletonBase<PowersSpawner>
 {
     // -----------------------------------------------------------------------
     // Fields
     // -----------------------------------------------------------------------
 
     #region Fields 
-
-    public static PowersSpawner Instance;
 
     [Header("Main Settings")]
     [Space]
@@ -54,28 +52,25 @@ public class PowersSpawner : MonoBehaviour
 
 
     // -----------------------------------------------------------------------
+    // Protected Methods
+    // -----------------------------------------------------------------------
+
+    #region Protected Methods
+
+    protected override void Awake()
+    {
+        base.Awake();
+        ConfigureReferences();
+    }
+
+    #endregion
+
+
+    // -----------------------------------------------------------------------
     // Private Methods
     // -----------------------------------------------------------------------
 
     #region Private Methods
-
-    private void Awake()
-    {
-        SetInstance();
-        ConfigureReferences();
-    }
-
-    private void SetInstance()
-    {
-        if (Instance == null)
-        {
-            Instance = this;
-        }
-        else
-        {
-            Destroy(gameObject);
-        }
-    }
 
     private void ConfigureReferences()
     {

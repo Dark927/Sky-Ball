@@ -1,4 +1,5 @@
 using System.Collections;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class RocketLauncher : MonoBehaviour
@@ -13,7 +14,7 @@ public class RocketLauncher : MonoBehaviour
     [Space]
 
     [SerializeField] private float _reloadTime = 0.5f;
-    [SerializeField] protected Transform _shootPoint;
+    [SerializeField] private Transform _shootPoint;
     protected ObjectsPool _rocketsPool;
 
 
@@ -21,6 +22,16 @@ public class RocketLauncher : MonoBehaviour
     [Space]
 
     [SerializeField] private GameObject _muzzleVFX;
+
+    #endregion
+
+
+    // -----------------------------------------------------------------------
+    // Properties
+    // -----------------------------------------------------------------------
+
+    #region Properties
+
 
     #endregion
 
@@ -66,6 +77,12 @@ public class RocketLauncher : MonoBehaviour
     public void StopRocketAttack()
     {
         StopAllCoroutines();
+    }
+
+    public void UpdateShootPointPosition(Vector3 position)
+    {
+        position.y = _shootPoint.position.y;
+        _shootPoint.position = position;
     }
 
     #endregion

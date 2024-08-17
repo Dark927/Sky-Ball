@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MusicManager : MonoBehaviour
+public class MusicManager : SingletonBaseGlobal<MusicManager>
 {
     // -----------------------------------------------------------------------
     // Fields

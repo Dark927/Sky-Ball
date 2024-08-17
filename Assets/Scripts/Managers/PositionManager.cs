@@ -2,12 +2,17 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PositionManager : MonoBehaviour
+public class PositionManager : SingletonBase<PositionManager>
 {
+    // -----------------------------------------------------------------------
+    // Fields
+    // -----------------------------------------------------------------------
+
+    #region Fields
+
     [Header("Main Settings")]
     [Space]
 
-    public static PositionManager Instance;
     [SerializeField] private float _fallBoundY = -2f;
 
 
@@ -22,9 +27,19 @@ public class PositionManager : MonoBehaviour
     private float _errorBoundY = -50f;
     private Transform _playerTransform;
 
+    #endregion
+
+
+    // -----------------------------------------------------------------------
+    // Properties
+    // -----------------------------------------------------------------------
+
+    #region Properties
 
     public float DeathBoundY => _fallBoundY;
     public float ErrorBoundY => _errorBoundY;
+
+    #endregion
 
 
     // -----------------------------------------------------------------------
@@ -114,15 +129,29 @@ public class PositionManager : MonoBehaviour
 
 
     // -----------------------------------------------------------------------
+    // Protected Methods
+    // -----------------------------------------------------------------------
+
+    #region Protected Methods
+
+    protected override void Awake()
+    {
+        base.Awake();
+
+        SetPlayerTransformReference();
+    }
+
+    #endregion
+
+
+    // -----------------------------------------------------------------------
     // Private Methods
     // -----------------------------------------------------------------------
 
     #region Private Methods
 
-    private void Awake()
+    private void SetPlayerTransformReference()
     {
-        SetInstance();
-
         PlayerMovement player = FindObjectOfType<PlayerMovement>();
 
 
@@ -134,18 +163,6 @@ public class PositionManager : MonoBehaviour
         {
             string errorMsg = $"{player} == null, can not find Player object! - {gameObject.name}";
             ErrorsManager.Instance.SendErrorMsg(errorMsg, true);
-        }
-    }
-
-    private void SetInstance()
-    {
-        if (Instance == null)
-        {
-            Instance = this;
-        }
-        else
-        {
-            Destroy(Instance);
         }
     }
 

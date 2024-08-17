@@ -27,19 +27,40 @@ public class PowerUp : MonoBehaviour
 
 
     // -----------------------------------------------------------------------
+    // Structs
+    // -----------------------------------------------------------------------
+
+    #region Structs
+
+    [System.Serializable]   
+    public struct Data
+    {
+        [SerializeField] private TYPE _type;
+
+        [SerializeField] private float _activeTime;
+        [SerializeField] private float _strength;
+        [SerializeField] private float _reloadTime;
+
+        [SerializeField] private Color _indicatorColor;
+
+
+        public TYPE Type => _type;
+        public float ActiveTime => _activeTime;
+        public float Strength => _strength;
+        public float ReloadTime => _reloadTime;
+        public Color IndicatorColor => _indicatorColor;
+    }
+
+    #endregion
+
+
+    // -----------------------------------------------------------------------
     // Fields
     // -----------------------------------------------------------------------
 
     #region Fields
 
-    [SerializeField] private TYPE _powerType = TYPE.FirstIndex;
-
-    [SerializeField] private float _powerUpActiveTime = 5f;
-    [SerializeField] private float _powerUpStrength = 5f;
-    [SerializeField] private float _powerUpReloadTime = 1f;
-
-    [SerializeField] private Color _indicatorColor;
-
+    [SerializeField] private Data _stats;
 
     #endregion
 
@@ -48,28 +69,9 @@ public class PowerUp : MonoBehaviour
     // Properties
     // -----------------------------------------------------------------------
 
-    #region Public Methods
+    #region Properties
 
-    public TYPE Type
-    {
-        get
-        {
-            if (_powerType != TYPE.NumberOfPowers)
-            {
-                return _powerType;
-            }
-            else
-            {
-                Debug.Log($"# Warning -> {gameObject.name} - PowerUpType == Power_numberOfPowers. Return LAST power up.");
-                return TYPE.LastIndex;
-            }
-        }
-    }
-
-    public float PowerActiveTime => _powerUpActiveTime;
-    public float PowerReloadTime => _powerUpReloadTime;
-    public float PowerUpStrength => _powerUpStrength;
-    public Color IndicatorColor => _indicatorColor;
+    public Data Stats => _stats;
 
     #endregion
 }

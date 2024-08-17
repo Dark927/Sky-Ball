@@ -39,8 +39,8 @@ public class EnemyHead : MonoBehaviour
 
     [HideInInspector] public UnityEvent OnDeathEvent = new();
 
-    protected EnemyBody _mainBody;
-    protected EnemyPowerUp _powerUps;
+    protected EnemyBody mainBody;
+    protected EnemyPowerUp powerUps;
 
     private EnemyVFX _enemyVFX;
 
@@ -82,7 +82,7 @@ public class EnemyHead : MonoBehaviour
 
     public virtual void TryDeactivate()
     {
-        if (!_mainBody.gameObject.activeInHierarchy)
+        if (!mainBody.gameObject.activeInHierarchy)
         {
             if (HasActiveChildren())
             {
@@ -97,9 +97,9 @@ public class EnemyHead : MonoBehaviour
 
     public void TryActivatePowers()
     {
-        if (_powerUps != null)
+        if (powerUps != null)
         {
-            _powerUps.TryActivateRocketLauncher();
+            powerUps.TryActivateRocketLauncher();
         }
     }
 
@@ -110,7 +110,7 @@ public class EnemyHead : MonoBehaviour
     // Protected Methods
     // -----------------------------------------------------------------------
 
-    #region Private Methods
+    #region Protected Methods
 
     protected virtual void ResetSettings()
     {
@@ -120,15 +120,15 @@ public class EnemyHead : MonoBehaviour
     protected virtual void InitialSettings()
     {
         Transform mainBodyTransform = transform.GetChild(0);
-        _mainBody = mainBodyTransform.GetComponent<EnemyBody>();
-        _powerUps = GetComponent<EnemyPowerUp>();
+        mainBody = mainBodyTransform.GetComponent<EnemyBody>();
+        powerUps = GetComponent<EnemyPowerUp>();
         _enemyVFX = GetComponent<EnemyVFX>();
     }
 
     protected virtual void Deactivate()
     {
         gameObject.SetActive(false);
-        _mainBody.gameObject.SetActive(true);
+        mainBody.gameObject.SetActive(true);
 
         OnDeathEvent?.Invoke();
     }
@@ -191,8 +191,10 @@ public class EnemyHead : MonoBehaviour
     private void SetOnDeathEventListeners()
     {
         OnDeathEvent.AddListener(WavesManager.Instance.DecrementAliveEnemiesCount);
+        OnDeathEvent.AddListener(GameManager.Instance.IncrementSessionKills);
+
         OnDeathEvent.AddListener(WavesManager.Instance.TryStartNextWave);
-        OnDeathEvent.AddListener(DynamicUI.Instance.UpdateEnemyCount);
+        OnDeathEvent.AddListener(UIManager.Instance.Gameplay.UpdateAliveEnemiesCount);
     }
 
     #endregion

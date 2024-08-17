@@ -45,8 +45,13 @@ public class SceneLoaderEditor : Editor
 
         if (showSceneSettings)
         {
-            string gameplaySceneLabel = GetNameWithSpaces(nameof(script.GameplayScene));
-            script.GameplayScene = (SceneAsset)EditorGUILayout.ObjectField(gameplaySceneLabel, script.GameplayScene, typeof(SceneAsset), false);
+            string sceneLabel;
+
+            sceneLabel = GetNameWithSpaces(nameof(script.GameplayScene));
+            script.GameplayScene = (SceneAsset)EditorGUILayout.ObjectField(sceneLabel, script.GameplayScene, typeof(SceneAsset), false);
+
+            sceneLabel = GetNameWithSpaces(nameof(script.MainMenuScene));
+            script.MainMenuScene = (SceneAsset)EditorGUILayout.ObjectField(sceneLabel, script.MainMenuScene, typeof(SceneAsset), false);
         }
     }
 

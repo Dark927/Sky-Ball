@@ -9,17 +9,19 @@ public class ASyncLoader : MonoBehaviour
     private Slider _progressSlider;
     private TextMeshProUGUI _loadingText;
 
-    public void LoadSceneASync(string sceneName, GameObject loadingScreenUI)
+    public void LoadSceneASync(string sceneName, GameObject loadingScreenUI, float startDelay = 0f)
     {
         _progressSlider = loadingScreenUI.GetComponentInChildren<Slider>();
         _loadingText = loadingScreenUI.GetComponentInChildren<TextMeshProUGUI>();
 
-        StartCoroutine(LoadSceneASyncRoutine(sceneName, loadingScreenUI));
+        StartCoroutine(LoadSceneASyncRoutine(sceneName, loadingScreenUI, startDelay));
     }
 
-    private IEnumerator LoadSceneASyncRoutine(string sceneName, GameObject loadingScreenUI)
+    private IEnumerator LoadSceneASyncRoutine(string sceneName, GameObject loadingScreenUI, float startDelay)
     {
         loadingScreenUI.SetActive(true);
+
+        yield return new WaitForSeconds(startDelay);
 
         AsyncOperation sceneLoadOperation = SceneManager.LoadSceneAsync(sceneName);
 
